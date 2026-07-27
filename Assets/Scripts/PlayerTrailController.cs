@@ -17,7 +17,7 @@ public class PlayerTrailController : MonoBehaviour
 
     void Update()
     {
-        float speed = rb.velocity.magnitude;   // FIXED
+        float speed = rb.linearVelocity.magnitude;   // FIXED
 
         if (speed >= minSpeed && !trail.enabled)
             trail.enabled = true;
