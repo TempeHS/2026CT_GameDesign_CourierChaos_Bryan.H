@@ -45,6 +45,9 @@ public class PlayerMovement : MonoBehaviour
     public float wallCheckDistance = 0.3f;
     public LayerMask wallLayer;
 
+    
+    public bool isFrozen = false;
+
     private Rigidbody2D rb;
     private float moveInput;
     private bool facingRight = true;
@@ -66,6 +69,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        
+        if (isFrozen) return;
+
         moveInput = Input.GetAxisRaw("Horizontal");
 
         bool jumpPressed = Input.GetButtonDown("Jump");
@@ -149,9 +155,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-//code below can be subject to change make sure not to screw up parts above. 
     void FixedUpdate()
     {
+        // ⭐ NEW: Freeze physics movement
+        if (isFrozen) return;
+
         if (isDashing || isSliding || isWallSliding) return;
 
         if (isGrounded)
@@ -203,7 +211,6 @@ public class PlayerMovement : MonoBehaviour
 
         rb.linearVelocity = new Vector2(newSpeed * Mathf.Sign(rb.linearVelocity.x), rb.linearVelocity.y);
     }
-
 
     void Jump()
     {
@@ -278,4 +285,5 @@ public class PlayerMovement : MonoBehaviour
                 wallCheck.position + (facingRight ? Vector3.right : Vector3.left) * wallCheckDistance);
         }
     }
+    
 }
