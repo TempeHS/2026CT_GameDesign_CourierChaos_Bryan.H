@@ -597,10 +597,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComponent: {fileID: 2035178728}
-  lines: []
+  lines:
+  - ' '
+  - ' '
+  - ' '
+  - ' '
   textSpeed: 2
-  dialogueBox: {fileID: 0}
-  playerMovement: {fileID: 0}
+  dialogueBox: {fileID: 163696483}
+  playerMovement: {fileID: 22380542}
 --- !u!114 &163696486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1782,6 +1786,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1472691052 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7343609855400029929, guid: d89de080ea706ff47af1bd3ed1096244, type: 3}
+  m_PrefabInstance: {fileID: 3806629197351624317}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1492868978
 GameObject:
   m_ObjectHideFlags: 0
@@ -1921,6 +1930,75 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5841576467698051655, guid: d89de080ea706ff47af1bd3ed1096244, type: 3}
   m_PrefabInstance: {fileID: 3806629197351624317}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1525064296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472691052}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e85f40e1a64eb43bf7cf90390e7388, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10
+  csgoMaxSpeed: 14
+  csgoGroundAccel: 120
+  csgoAirAccel: 80
+  csgoFriction: 8
+  jumpForce: 18
+  coyoteTime: 0.1
+  jumpBufferTime: 0.1
+  jumpCutMultiplier: 0.5
+  maxAirJumps: 3
+  dashSpeed: 25
+  dashDuration: 0.15
+  dashCooldown: 0.3
+  maxAirDashes: 1
+  slideSpeed: 16
+  slideDuration: 0.4
+  slideFriction: 0.2
+  enableWallSlide: 1
+  wallSlideSpeed: 2
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  wallCheck: {fileID: 0}
+  wallCheckDistance: 0.3
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  isFrozen: 0
+--- !u!50 &1525064297
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472691052}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDamping: 0
+  m_AngularDamping: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1579533119
 GameObject:
   m_ObjectHideFlags: 0
@@ -2461,7 +2539,7 @@ MonoBehaviour:
   - ' Ahh~ Another day full of work, kinda kills the mood for such a good day. '
   - If only boss didnt end up puting me into this weird ass neigbourhood.
   - 'Lets go ahead and start this delivery run '
-  - '*pick up the package*'
+  - ' - Pick up the package - '
   textSpeed: 0.05
   dialogueBox: {fileID: 0}
   playerMovement: {fileID: 0}
@@ -2644,7 +2722,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5841576467698051655, guid: d89de080ea706ff47af1bd3ed1096244, type: 3}
       insertIndex: -1
       addedObject: {fileID: 163696484}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7343609855400029929, guid: d89de080ea706ff47af1bd3ed1096244, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1525064297}
+    - targetCorrespondingSourceObject: {fileID: 7343609855400029929, guid: d89de080ea706ff47af1bd3ed1096244, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1525064296}
   m_SourcePrefab: {fileID: 100100000, guid: d89de080ea706ff47af1bd3ed1096244, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

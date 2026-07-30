@@ -1,289 +1,289 @@
-using System.Collections;
-using UnityEngine;
+    using System.Collections;
+    using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-public class PlayerMovement : MonoBehaviour
-{
-    [Header("Movement")]
-    public float moveSpeed = 10f;
-    public float csgoMaxSpeed = 14f;
-    public float csgoGroundAccel = 120f;
-    public float csgoAirAccel = 80f;
-    public float csgoFriction = 8f;
-
-    [Header("Jump")]
-    public float jumpForce = 18f;
-    public float coyoteTime = 0.1f;
-    public float jumpBufferTime = 0.1f;
-    [Range(0f, 1f)] public float jumpCutMultiplier = 0.5f;
-
-    [Header("Jump Limits")]
-    public int maxAirJumps = 3;
-    private int airJumpsUsed = 0;
-
-    [Header("Dash")]
-    public float dashSpeed = 25f;
-    public float dashDuration = 0.15f;
-    public float dashCooldown = 0.3f;
-    public int maxAirDashes = 1;
-
-    [Header("Slide (Ground)")]
-    public float slideSpeed = 16f;
-    public float slideDuration = 0.4f;
-    public float slideFriction = 0.2f;
-
-    [Header("Wall Slide")]
-    public bool enableWallSlide = true;
-    public float wallSlideSpeed = 2f;
-
-    [Header("Checks")]
-    public Transform groundCheck;
-    public float groundCheckRadius = 0.2f;
-    public LayerMask groundLayer;
-
-    public Transform wallCheck;
-    public float wallCheckDistance = 0.3f;
-    public LayerMask wallLayer;
-
-    
-    public bool isFrozen = false;
-
-    private Rigidbody2D rb;
-    private float moveInput;
-    private bool facingRight = true;
-
-    private bool isGrounded;
-    private bool isSliding;
-    private bool isDashing;
-    private bool isWallSliding;
-
-    private float coyoteCounter;
-    private float jumpBufferCounter;
-    private float lastDashTime;
-    private int airDashesUsed;
-
-    void Awake()
+    [RequireComponent(typeof(Rigidbody2D))]
+    public class PlayerMovement : MonoBehaviour
     {
-        rb = GetComponent<Rigidbody2D>();
-    }
+        [Header("Movement")]
+        public float moveSpeed = 10f;
+        public float csgoMaxSpeed = 14f;
+        public float csgoGroundAccel = 120f;
+        public float csgoAirAccel = 80f;
+        public float csgoFriction = 8f;
 
-    void Update()
-    {
+        [Header("Jump")]
+        public float jumpForce = 18f;
+        public float coyoteTime = 0.1f;
+        public float jumpBufferTime = 0.1f;
+        [Range(0f, 1f)] public float jumpCutMultiplier = 0.5f;
+
+        [Header("Jump Limits")]
+        public int maxAirJumps = 3;
+        private int airJumpsUsed = 0;
+
+        [Header("Dash")]
+        public float dashSpeed = 25f;
+        public float dashDuration = 0.15f;
+        public float dashCooldown = 0.3f;
+        public int maxAirDashes = 1;
+
+        [Header("Slide (Ground)")]
+        public float slideSpeed = 16f;
+        public float slideDuration = 0.4f;
+        public float slideFriction = 0.2f;
+
+        [Header("Wall Slide")]
+        public bool enableWallSlide = true;
+        public float wallSlideSpeed = 2f;
+
+        [Header("Checks")]
+        public Transform groundCheck;
+        public float groundCheckRadius = 0.2f;
+        public LayerMask groundLayer;
+
+        public Transform wallCheck;
+        public float wallCheckDistance = 0.3f;
+        public LayerMask wallLayer;
+
         
-        if (isFrozen) return;
+        public bool isFrozen = false;
 
-        moveInput = Input.GetAxisRaw("Horizontal");
+        private Rigidbody2D rb;
+        private float moveInput;
+        private bool facingRight = true;
 
-        bool jumpPressed = Input.GetButtonDown("Jump");
-        bool jumpHeld = Input.GetButton("Jump");
-        bool dashPressed = Input.GetButtonDown("Fire3");
-        bool slidePressed = Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.S);
+        private bool isGrounded;
+        private bool isSliding;
+        private bool isDashing;
+        private bool isWallSliding;
 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        private float coyoteCounter;
+        private float jumpBufferCounter;
+        private float lastDashTime;
+        private int airDashesUsed;
 
-        if (isGrounded)
+        void Awake()
         {
-            coyoteCounter = coyoteTime;
-            airDashesUsed = 0;
-            airJumpsUsed = 0;
-        }
-        else
-        {
-            coyoteCounter -= Time.deltaTime;
-        }
-
-        if (jumpPressed)
-            jumpBufferCounter = jumpBufferTime;
-        else
-            jumpBufferCounter = Mathf.Max(jumpBufferCounter - Time.deltaTime, 0f);
-
-        bool canGroundJump = coyoteCounter > 0f && !isWallSliding;
-        bool canAirJump = !isGrounded && airJumpsUsed < maxAirJumps;
-
-        if (jumpBufferCounter > 0f && (canGroundJump || canAirJump) && !isDashing)
-        {
-            Jump();
-            if (!canGroundJump) airJumpsUsed++;
-            jumpBufferCounter = 0f;
+            rb = GetComponent<Rigidbody2D>();
         }
 
-        if (!jumpHeld && rb.linearVelocity.y > 0f)
+        void Update()
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
-        }
+            Debug.Log("isFrozen = " + isFrozen);
+            if (isFrozen) return;
 
-        if (dashPressed && Time.time >= lastDashTime + dashCooldown && !isDashing)
-        {
-            bool canDash = isGrounded || airDashesUsed < maxAirDashes;
-            if (canDash)
+            moveInput = Input.GetAxisRaw("Horizontal");
+
+            bool jumpPressed = Input.GetButtonDown("Jump");
+            bool jumpHeld = Input.GetButton("Jump");
+            bool dashPressed = Input.GetButtonDown("Fire3");
+            bool slidePressed = Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.S);
+
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+            if (isGrounded)
             {
-                if (!isGrounded) airDashesUsed++;
-                StartCoroutine(DashCoroutine());
+                coyoteCounter = coyoteTime;
+                airDashesUsed = 0;
+                airJumpsUsed = 0;
+            }
+            else
+            {
+                coyoteCounter -= Time.deltaTime;
+            }
+
+            if (jumpPressed)
+                jumpBufferCounter = jumpBufferTime;
+            else
+                jumpBufferCounter = Mathf.Max(jumpBufferCounter - Time.deltaTime, 0f);
+
+            bool canGroundJump = coyoteCounter > 0f && !isWallSliding;
+            bool canAirJump = !isGrounded && airJumpsUsed < maxAirJumps;
+
+            if (jumpBufferCounter > 0f && (canGroundJump || canAirJump) && !isDashing)
+            {
+                Jump();
+                if (!canGroundJump) airJumpsUsed++;
+                jumpBufferCounter = 0f;
+            }
+
+            if (!jumpHeld && rb.linearVelocity.y > 0f)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
+            }
+
+            if (dashPressed && Time.time >= lastDashTime + dashCooldown && !isDashing)
+            {
+                bool canDash = isGrounded || airDashesUsed < maxAirDashes;
+                if (canDash)
+                {
+                    if (!isGrounded) airDashesUsed++;
+                    StartCoroutine(DashCoroutine());
+                }
+            }
+
+            if (slidePressed && isGrounded && Mathf.Abs(moveInput) > 0.1f && !isSliding && !isDashing)
+            {
+                StartCoroutine(SlideCoroutine());
+            }
+
+            if (enableWallSlide && !isGrounded && !isDashing)
+            {
+                bool touchingWall = Physics2D.Raycast(
+                    wallCheck.position,
+                    facingRight ? Vector2.right : Vector2.left,
+                    wallCheckDistance,
+                    wallLayer
+                );
+
+                isWallSliding = touchingWall && rb.linearVelocity.y < 0f && Mathf.Abs(moveInput) > 0.1f;
+
+                if (isWallSliding)
+                {
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed));
+                }
+            }
+            else
+            {
+                isWallSliding = false;
+            }
+
+            if (!isDashing && !isSliding)
+            {
+                if (moveInput > 0 && !facingRight) Flip();
+                else if (moveInput < 0 && facingRight) Flip();
             }
         }
 
-        if (slidePressed && isGrounded && Mathf.Abs(moveInput) > 0.1f && !isSliding && !isDashing)
+        void FixedUpdate()
         {
-            StartCoroutine(SlideCoroutine());
-        }
+           
+            if (isFrozen) return;
 
-        if (enableWallSlide && !isGrounded && !isDashing)
-        {
-            bool touchingWall = Physics2D.Raycast(
-                wallCheck.position,
-                facingRight ? Vector2.right : Vector2.left,
-                wallCheckDistance,
-                wallLayer
-            );
+            if (isDashing || isSliding || isWallSliding) return;
 
-            isWallSliding = touchingWall && rb.linearVelocity.y < 0f && Mathf.Abs(moveInput) > 0.1f;
-
-            if (isWallSliding)
+            if (isGrounded)
             {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed));
+                ApplyGroundFriction();
+                CSGOAccelerate(moveInput, csgoMaxSpeed, csgoGroundAccel);
+            }
+            else
+            {
+                CSGOAirAccelerate(moveInput, csgoMaxSpeed, csgoAirAccel);
             }
         }
-        else
+
+        void CSGOAccelerate(float wishDir, float wishSpeed, float accel)
         {
-            isWallSliding = false;
+            float currentSpeed = rb.linearVelocity.x * wishDir;
+            float addSpeed = wishSpeed - currentSpeed;
+
+            if (addSpeed <= 0) return;
+
+            float accelSpeed = accel * Time.fixedDeltaTime * wishSpeed;
+            if (accelSpeed > addSpeed)
+                accelSpeed = addSpeed;
+
+            rb.linearVelocity += new Vector2(accelSpeed * wishDir, 0);
         }
 
-        if (!isDashing && !isSliding)
+        void CSGOAirAccelerate(float wishDir, float wishSpeed, float accel)
         {
-            if (moveInput > 0 && !facingRight) Flip();
-            else if (moveInput < 0 && facingRight) Flip();
-        }
-    }
+            float currentSpeed = rb.linearVelocity.x * wishDir;
+            float addSpeed = wishSpeed - currentSpeed;
 
-    void FixedUpdate()
-    {
-        // ⭐ NEW: Freeze physics movement
-        if (isFrozen) return;
+            if (addSpeed <= 0) return;
 
-        if (isDashing || isSliding || isWallSliding) return;
+            float accelSpeed = accel * Time.fixedDeltaTime * wishSpeed;
+            if (accelSpeed > addSpeed)
+                accelSpeed = addSpeed;
 
-        if (isGrounded)
-        {
-            ApplyGroundFriction();
-            CSGOAccelerate(moveInput, csgoMaxSpeed, csgoGroundAccel);
-        }
-        else
-        {
-            CSGOAirAccelerate(moveInput, csgoMaxSpeed, csgoAirAccel);
-        }
-    }
-
-    void CSGOAccelerate(float wishDir, float wishSpeed, float accel)
-    {
-        float currentSpeed = rb.linearVelocity.x * wishDir;
-        float addSpeed = wishSpeed - currentSpeed;
-
-        if (addSpeed <= 0) return;
-
-        float accelSpeed = accel * Time.fixedDeltaTime * wishSpeed;
-        if (accelSpeed > addSpeed)
-            accelSpeed = addSpeed;
-
-        rb.linearVelocity += new Vector2(accelSpeed * wishDir, 0);
-    }
-
-    void CSGOAirAccelerate(float wishDir, float wishSpeed, float accel)
-    {
-        float currentSpeed = rb.linearVelocity.x * wishDir;
-        float addSpeed = wishSpeed - currentSpeed;
-
-        if (addSpeed <= 0) return;
-
-        float accelSpeed = accel * Time.fixedDeltaTime * wishSpeed;
-        if (accelSpeed > addSpeed)
-            accelSpeed = addSpeed;
-
-        rb.linearVelocity += new Vector2(accelSpeed * wishDir, 0);
-    }
-
-    void ApplyGroundFriction()
-    {
-        float speed = Mathf.Abs(rb.linearVelocity.x);
-        if (speed < 0.1f) return;
-
-        float drop = speed * csgoFriction * Time.fixedDeltaTime;
-        float newSpeed = Mathf.Max(speed - drop, 0);
-
-        rb.linearVelocity = new Vector2(newSpeed * Mathf.Sign(rb.linearVelocity.x), rb.linearVelocity.y);
-    }
-
-    void Jump()
-    {
-        coyoteCounter = 0f;
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-    }
-
-    IEnumerator DashCoroutine()
-    {
-        isDashing = true;
-        lastDashTime = Time.time;
-
-        float originalGravity = rb.gravityScale;
-        rb.gravityScale = 0f;
-
-        Vector2 dashDir = facingRight ? Vector2.right : Vector2.left;
-        float t = 0f;
-
-        while (t < dashDuration)
-        {
-            rb.linearVelocity = dashDir * dashSpeed;
-            t += Time.deltaTime;
-            yield return null;
+            rb.linearVelocity += new Vector2(accelSpeed * wishDir, 0);
         }
 
-        rb.gravityScale = originalGravity;
-        isDashing = false;
-    }
-
-    IEnumerator SlideCoroutine()
-    {
-        isSliding = true;
-
-        float slideDir = facingRight ? 1f : -1f;
-        float timer = 0f;
-
-        while (timer < slideDuration && isGrounded)
+        void ApplyGroundFriction()
         {
-            rb.linearVelocity = new Vector2(slideDir * slideSpeed, rb.linearVelocity.y);
-            rb.linearVelocity = new Vector2(
-                Mathf.Lerp(rb.linearVelocity.x, 0f, slideFriction * Time.deltaTime),
-                rb.linearVelocity.y
-            );
-            timer += Time.deltaTime;
-            yield return null;
+            float speed = Mathf.Abs(rb.linearVelocity.x);
+            if (speed < 0.1f) return;
+
+            float drop = speed * csgoFriction * Time.fixedDeltaTime;
+            float newSpeed = Mathf.Max(speed - drop, 0);
+
+            rb.linearVelocity = new Vector2(newSpeed * Mathf.Sign(rb.linearVelocity.x), rb.linearVelocity.y);
         }
 
-        isSliding = false;
-    }
-
-    void Flip()
-    {
-        facingRight = !facingRight;
-        Vector3 s = transform.localScale;
-        s.x *= -1f;
-        transform.localScale = s;
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        if (groundCheck != null)
+        void Jump()
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+            coyoteCounter = 0f;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
 
-        if (wallCheck != null)
+        IEnumerator DashCoroutine()
         {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(wallCheck.position,
-                wallCheck.position + (facingRight ? Vector3.right : Vector3.left) * wallCheckDistance);
+            isDashing = true;
+            lastDashTime = Time.time;
+
+            float originalGravity = rb.gravityScale;
+            rb.gravityScale = 0f;
+
+            Vector2 dashDir = facingRight ? Vector2.right : Vector2.left;
+            float t = 0f;
+
+            while (t < dashDuration)
+            {
+                rb.linearVelocity = dashDir * dashSpeed;
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            rb.gravityScale = originalGravity;
+            isDashing = false;
         }
+
+        IEnumerator SlideCoroutine()
+        {
+            isSliding = true;
+
+            float slideDir = facingRight ? 1f : -1f;
+            float timer = 0f;
+
+            while (timer < slideDuration && isGrounded)
+            {
+                rb.linearVelocity = new Vector2(slideDir * slideSpeed, rb.linearVelocity.y);
+                rb.linearVelocity = new Vector2(
+                    Mathf.Lerp(rb.linearVelocity.x, 0f, slideFriction * Time.deltaTime),
+                    rb.linearVelocity.y
+                );
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            isSliding = false;
+        }
+
+        void Flip()
+        {
+            facingRight = !facingRight;
+            Vector3 s = transform.localScale;
+            s.x *= -1f;
+            transform.localScale = s;
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            if (groundCheck != null)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+            }
+
+            if (wallCheck != null)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(wallCheck.position,
+                    wallCheck.position + (facingRight ? Vector3.right : Vector3.left) * wallCheckDistance);
+            }
+        }
+        
     }
-    
-}

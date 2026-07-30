@@ -24,19 +24,22 @@ public class NewMonoBehaviourScript : MonoBehaviour
         {
             if (isTyping)
             {
-                // Skip typing animation
+                
                 StopAllCoroutines();
                 textComponent.text = lines[index];
                 isTyping = false;
             }
             else
             {
+                
                 NextLine();
-                if (index == 3)
+
+                
+                if (index >= lines.Length - 1   )
                 {
+                    Debug.Log("Unfreezing player: dialogue finished");
                     playerMovement.isFrozen = false;
                 }
-
             }
         }
     }
@@ -46,6 +49,9 @@ public class NewMonoBehaviourScript : MonoBehaviour
         index = 0;
         textComponent.text = string.Empty;
         StartCoroutine(TypeLine());
+
+        
+        Debug.Log("Freezing player: dialogue started");
         playerMovement.isFrozen = true;
     }
 
@@ -72,19 +78,23 @@ public class NewMonoBehaviourScript : MonoBehaviour
         }
         else
         {
+            
             dialogueBox.SetActive(false);
         }
-
     }
+
+ 
     public void FreezeForSeconds(float seconds)
-{
-    StartCoroutine(FreezeTimer(seconds));
-}
+    {
+        StartCoroutine(FreezeTimer(seconds));
+    }
 
     private IEnumerator FreezeTimer(float seconds)
     {
-    isFrozen = true;
-    yield return new WaitForSeconds(seconds);
-    isFrozen = false;
+        Debug.Log("Timed freeze started");
+        playerMovement.isFrozen = true;
+        yield return new WaitForSeconds(seconds);
+        playerMovement.isFrozen = false;
+        Debug.Log("Timed freeze ended");
     }
 }
