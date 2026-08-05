@@ -155,13 +155,13 @@ TextureImporter:
       name: possible background_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1800
-        height: 1200
+        x: 41
+        y: 123
+        width: 1715
+        height: 962
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 37, y: 115, z: 43, w: 111}
       customData: 
       outline: []
       physicsShape: []
@@ -177,7 +177,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 6afe02d382dfe234db4c93fc04f623b4
     internalID: 0
     vertices: []
     indices: 
