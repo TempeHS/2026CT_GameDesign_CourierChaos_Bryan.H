@@ -69,9 +69,13 @@ public class PlayerMovement : MonoBehaviour
     private bool dashPressed;
     private bool slidePressed;
 
+    
+    private Animator anim;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponentInChildren<Animator>();   // auto‑find animator
     }
 
     void Update()
@@ -88,6 +92,8 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter = jumpBufferTime;
         else
             jumpBufferCounter = Mathf.Max(jumpBufferCounter - Time.deltaTime, 0f);
+
+        UpdateAnimationParameters();
     }
 
     void FixedUpdate()
@@ -190,12 +196,16 @@ public class PlayerMovement : MonoBehaviour
         coyoteCounter = 0f;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+        anim.SetTrigger("Jump");
     }
 
     IEnumerator DashCoroutine()
     {
         isDashing = true;
         lastDashTime = Time.time;
+
+        anim.SetTrigger("Dash");
 
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
@@ -225,6 +235,7 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator SlideCoroutine()
     {
         isSliding = true;
+        anim.SetBool("Sliding", true);
 
         float slideDir = facingRight ? 1f : -1f;
         float t = 0f;
@@ -238,6 +249,7 @@ public class PlayerMovement : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
+        anim.SetBool("Sliding", false);
         isSliding = false;
     }
 
@@ -284,5 +296,16 @@ public class PlayerMovement : MonoBehaviour
     {
         facingRight = !facingRight;
         transform.rotation = Quaternion.Euler(0, facingRight ? 0 : 180, 0);
+    }
+
+
+    void UpdateAnimationParameters()
+    {
+        anim.SetBool("Grounded", isGrounded);
+        anim.SetBool("WallSlide", isWallSliding);
+        anim.SetBool("Dashing", isDashing);
+
+        anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
+        anim.SetFloat("VerticalSpeed", rb.linearVelocity.y);
     }
 }
