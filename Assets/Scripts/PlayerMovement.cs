@@ -141,11 +141,14 @@ public class PlayerMovement : MonoBehaviour
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        bool touchingWall = Physics2D.Raycast(
-            wallCheck.position,
-            facingRight ? Vector2.right : Vector2.left,
-            wallCheckDistance,
-            wallLayer);
+       bool touchingRightWall = Physics2D.Raycast(
+         wallCheck.position, Vector2.right, wallCheckDistance, wallLayer);
+
+        bool touchingLeftWall = Physics2D.Raycast(
+        wallCheck.position, Vector2.left, wallCheckDistance, wallLayer);
+
+        bool touchingWall = touchingRightWall || touchingLeftWall;
+        float wallJumpDirection = touchingRightWall ? -1f : 1f;
 
         if (isGrounded)
         {
@@ -172,17 +175,19 @@ public class PlayerMovement : MonoBehaviour
                 Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed));
         }
 
-        if (isWallSliding && jumpPressed)
-        {
-            float direction = facingRight ? -1f : 1f;
-            rb.linearVelocity = new Vector2(direction * wallJumpHorizontalBoost, 0f);
-            rb.AddForce(
-                new Vector2(direction * wallJumpHorizontalBoost, wallJumpForce),
-                ForceMode2D.Impulse);
+       
+if (isWallSliding && jumpBufferCounter > 0f)
+{
+    rb.linearVelocity = new Vector2(
+        wallJumpDirection * wallJumpHorizontalBoost,
+        wallJumpForce
+    );
 
-            isWallSliding = false;
-            return;
-        }
+    jumpBufferCounter = 0f;
+    isWallSliding = false;
+    anim.SetTrigger("Jump");
+    return;
+}
 
         bool canGroundJump = coyoteCounter > 0f && !isWallSliding;
         bool canAirJump = !isGrounded && airJumpsUsed < maxAirJumps;
