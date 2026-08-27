@@ -3,12 +3,12 @@
 | Field | Detail |
 |---|---|
 | Courier Chaos | |
-| Bryan H | |
-| Y10 CT | |
-| https://github.com/TempeHS/2026CT_GameDesign_CourierChaos_Bryan.H | |
-| 6000.0.58f1 | |
-| v0.1 | |
-| 27/08/26 | |
+| **Student Name(s)** | Bryan H|
+| **Class / Course** | Courier Chaos|
+| **Repository** | https://github.com/TempeHS/2026CT_GameDesign_CourierChaos_Bryan.H|
+| **Unity Version** |6000.0.58f1 |
+| **Document Version** | v0.1|
+| **Date** | 27/08/26|
 
 ---
 
@@ -29,8 +29,6 @@
 ---
 
 ## 1. Game Overview
-
-
 
 ### 1.1 Genre
 
