@@ -6,7 +6,7 @@
 | **Student Name(s)** | Bryan H|
 | **Class / Course** | Courier Chaos|
 | **Repository** | https://github.com/TempeHS/2026CT_GameDesign_CourierChaos_Bryan.H|
-| **Unity Version** |6000.0.58f1 |
+| **Unity Version** |6000.0.58f1|
 | **Document Version** | v0.1|
 | **Date** | 27/08/26|
 
@@ -48,9 +48,9 @@
 ### 1.5 Platform & Build Settings
 | Setting | Detail |
 |---|---|
-| Target Platform | |
-| Resolution | |
-| Build Type | |
+| Target Platform | Windows 32x - 64x - 86x|
+| Resolution | 1980x1080p - 2560x1440p|
+| Build Type | Development|
 
 ---
 
