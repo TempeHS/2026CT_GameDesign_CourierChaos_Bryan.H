@@ -2,7 +2,7 @@
 
 | Field | Detail |
 |---|---|
-| Courier Chaos | |
+| **Name** |Courier Chaos|
 | **Student Name(s)** | Bryan H|
 | **Class / Course** | Courier Chaos|
 | **Repository** | https://github.com/TempeHS/2026CT_GameDesign_CourierChaos_Bryan.H|
