@@ -30,27 +30,28 @@
 
 ## 1. Game Overview
 
-### 1.1 Genre
 
+### 1.1 Genre
+2d Platformer
 
 ### 1.2 Target Audience
-
+Ages 7-15
 
 ### 1.3 Game Summary
-
+Courier Chaos is a platform roleplayer action game revolving around you - the courier. Your goal is to deliver packages on time and not get lost in the labyrinth of packages!
 
 ### 1.4 Win / Loss Conditions
 | Condition | Description |
 |---|---|
-| Win | |
-| Loss | |
+| Win |Reaching Houses / Completing Levels |
+| Loss |Falling, Death |
 
 ### 1.5 Platform & Build Settings
 | Setting | Detail |
 |---|---|
-| Target Platform | Windows 32x - 64x - 86x|
-| Resolution | 1980x1080p - 2560x1440p|
-| Build Type | Development|
+| Target Platform | PC |
+| Resolution |Any 16:9 Aspect Ratio |
+| Build Type |Windows 32x - 64x - 86x |
 
 ---
 
