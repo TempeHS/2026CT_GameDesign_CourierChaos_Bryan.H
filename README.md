@@ -38,7 +38,7 @@
 Ages 7-15
 
 ### 1.3 Game Summary
-Courier Chaos is a platform roleplayer action game revolving around you - the courier. Your goal is to deliver packages on time and not get lost in the labyrinth of packages!
+Courier Chaos is a platform roleplayer action game revolving around you - the courier. Your goal is to deliver packages on time and not get lost in the labyrinth of packages! TEST
 
 ### 1.4 Win / Loss Conditions
 | Condition | Description |
