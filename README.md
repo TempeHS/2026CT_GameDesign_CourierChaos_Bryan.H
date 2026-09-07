@@ -473,7 +473,7 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 #### Key Commits
 | Commit Message | What Changed |
 |---|---|
-| | |
+| WIP added movement asset + first gamescene| Added many .meta files, mainly on playerinput and character rednering |
 | | |
 | | |
 
