@@ -99,10 +99,11 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 ### 3.2 Player Controls
 | Action | Input (Keyboard / Controller) | Description |
 |---|---|---|
-| | | |
-| | | |
-| | | |
-| | | |
+|Jump | Space Bar | Allows player to leap into air and air jump 3 times |
+|Moveleft |A |Moves player to the left  |
+|Moveright |D |Moves Player to  the right |
+|Dash |Shift |Sudden leap of power second to a horizontal jump |
+|Slides | Ctrl | When going at velocity, player can skid across the ground gaining speed | 
 
 ### 3.3 Physics & Collision
 | Feature | Description |
