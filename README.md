@@ -131,6 +131,11 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 
 ## 4. Visual Features
 
+Parallax - Background moves with the character to gain more visual depth  
+Infinite background - Allows player to fully explore the playable map without an extrememly large background art
+No compression images - Allows sprites and objects to remain clear close up
+
+
 ### 4.1 Particle Effects
 
 | Effect Name | Purpose | Screenshot |
@@ -395,7 +400,7 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 
 ---
 
-### Branch 2 — `feature/`
+### Branch 2 — `Camera`
 
 | Field | Detail |
 |---|---|
@@ -427,7 +432,7 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 
 ---
 
-### Branch 3 — `feature/`
+### Branch 3 — `Tileset`
 
 | Field | Detail |
 |---|---|
@@ -458,7 +463,7 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 
 ---
 
-### Branch 4 — `feature/`
+### Branch 4 — `"-best save"`
 
 | Field | Detail |
 |---|---|
