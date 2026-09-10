@@ -134,6 +134,7 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 Parallax - Background moves with the character to gain more visual depth  
 Infinite background - Allows player to fully explore the playable map without an extrememly large background art
 No compression images - Allows sprites and objects to remain clear close up
+Detailed Sprites - Most sprites have multiple layers in the map 
 
 
 ### 4.1 Particle Effects
