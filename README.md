@@ -32,10 +32,10 @@
 
 
 ### 1.1 Genre
-2d Platformer
+2d Platformer - Adventure
 
 ### 1.2 Target Audience
-Ages 7-15
+Ages 7+
 
 ### 1.3 Game Summary
 Courier Chaos is a platform roleplayer action game revolving around you - the courier. Your goal is to deliver packages on time and not get lost in the labyrinth of packages! 
@@ -43,7 +43,7 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 ### 1.4 Win / Loss Conditions
 | Condition | Description |
 |---|---|
-| Win |Reaching Houses / Completing Levels |
+| Win |Reaching Houses / Completing Levels / Delivering Parcles |
 | Loss |Falling, Death |
 
 ### 1.5 Platform & Build Settings
@@ -90,27 +90,27 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 ### 3.1 Core Mechanics
 | ID | Mechanic | Description | Implemented In (Script/Object) |
 |---|---|---|---|
-| M-1 | | | |
-| M-2 | | | |
-| M-3 | | | |
-| M-4 | | | |
-| M-5 | | | |
+| M-1 |Bouding System |Whenever player crosses intro area with TP box, teleports player back to spawn to prevent out of bunds without making the player feel caged. | Is "OutOfBounds.cs" and implimented in fade elements and both out of bounds triggers.|
+| M-2 |Unique Movement |Movement is not 100% linear. It mixes a few aspects from velocity control, accelleration curves and adds friction to object touch. Derived state dependant overrides the classic linear movemment and presents as peicewise linear. | Physics, added to "Player Movement.cs", implimented in player.|
+| M-3 |Falling Walljumps |When players are hanging on the side of a wall, they are able to jump whilst still touching the wall, the caveat being that they are only allowed to jump when they are falling.  | Implemented in "Player Movement.cs" and used on the player alongside gameobject "wallCheck"|
+| M-4 | Dialouge System | Managing in-game dialouge and allows converse or instructions to progress story. |"DIALOUGE.cs" is implemented in the first scence of the game, inside of Package simple_0 > Canvas > pickupText. |
+| M-5 |  | | |
 
 ### 3.2 Player Controls
 | Action | Input (Keyboard / Controller) | Description |
 |---|---|---|
-|Jump | Space Bar | Allows player to leap into air and air jump 3 times |
-|Moveleft |A |Moves player to the left  |
-|Moveright |D |Moves Player to  the right |
-|Dash |Shift |Sudden leap of power second to a horizontal jump |
-|Slides | Ctrl | When going at velocity, player can skid across the ground gaining speed | 
+|Jump | Space Bar | Allows player to leap into air and air jump 3 times. |
+|Moveleft |A |Moves player to the left. |
+|Moveright |D |Moves Player to  the right. |
+|Dash /// Broken|Shift |Sudden leap of power second to a horizontal jump. |
+|Slides /// Broken| Ctrl | When going at velocity, player can skid across the ground gaining speed.| 
 
 ### 3.3 Physics & Collision
 | Feature | Description |
 |---|---|
-| | |
-| | |
-| | |
+|"CSGO air" | Acceleration and Friction implimentation insipred by Counter-Strike, controls set airspeeds and speed at which the player slows down on the ground and on the wall. Was going to try implementing slide cancelling and bunnoy-hops but did'nt work out too well. |
+|Arcade style - velocity based movement |Predictable movement paths, instant directional change and snappy controls. The essence of a good platformer. |
+|Collision System |A mixed base of raycast and overlap checks. (finish please) |
 
 ### 3.4 Game Loop
 | Stage | Description |
@@ -133,7 +133,7 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 
 Parallax - Background moves with the character to gain more visual depth  
 Infinite background - Allows player to fully explore the playable map without an extrememly large background art
-No compression images - Allows sprites and objects to remain clear close up
+No compressed images - Allows sprites and objects to remain clear close up
 Detailed Sprites - Most sprites have multiple layers in the map 
 
 
