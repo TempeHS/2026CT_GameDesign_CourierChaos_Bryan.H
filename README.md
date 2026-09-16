@@ -90,7 +90,7 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 ### 3.1 Core Mechanics
 | ID | Mechanic | Description | Implemented In (Script/Object) |
 |---|---|---|---|
-| M-1 |Bouding System |Whenever player crosses intro area with TP box, teleports player back to spawn to prevent out of bunds without making the player feel caged. | Is "OutOfBounds.cs" and implimented in fade elements and both out of bounds triggers.|
+| M-1 |Bouding System |Whenever player crosses intro area with TP box, teleports player back to spawn to prevent out of bounds without making the player feel caged. | Is "OutOfBounds.cs" and implimented in fade elements and both out of bounds triggers.|
 | M-2 |Unique Movement |Movement is not 100% linear. It mixes a few aspects from velocity control, accelleration curves and adds friction to object touch. Derived state dependant overrides the classic linear movemment and presents as peicewise linear. | Physics, added to "Player Movement.cs", implimented in player.|
 | M-3 |Falling Walljumps |When players are hanging on the side of a wall, they are able to jump whilst still touching the wall, the caveat being that they are only allowed to jump when they are falling.  | Implemented in "Player Movement.cs" and used on the player alongside gameobject "wallCheck"|
 | M-4 | Dialouge System | Managing in-game dialouge and allows converse or instructions to progress story. |"DIALOUGE.cs" is implemented in the first scence of the game, inside of Package simple_0 > Canvas > pickupText. |
