@@ -17,6 +17,12 @@ public class PlayerMovement : MonoBehaviour
     public float jumpBufferTime = 0.15f;
     [Range(0f, 1f)] public float jumpCutMultiplier = 0.5f;
 
+    [Header("Jump Sound")]
+    public AudioSource jumpSound;
+
+    [Header("Walking Sound")]
+    public AudioSource walkingSound;
+
     [Header("Jump Limits")]
     public int maxAirJumps = 3;
     private int airJumpsUsed;
@@ -104,7 +110,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (anim == null)
-            Debug.LogWarning("PlayerMovement could not find an Animator. Movement will work without animations.", this);
+            Debug.LogWarning(
+                "PlayerMovement could not find an Animator. Movement will work without animations.",
+                this
+            );
     }
 
     private Transform CreateCheck(string checkName, Vector3 localPosition)
@@ -129,7 +138,10 @@ public class PlayerMovement : MonoBehaviour
         if (jumpPressed)
             jumpBufferCounter = jumpBufferTime;
         else
-            jumpBufferCounter = Mathf.Max(jumpBufferCounter - Time.deltaTime, 0f);
+            jumpBufferCounter = Mathf.Max(
+                jumpBufferCounter - Time.deltaTime,
+                0f
+            );
 
         UpdateAnimationParameters();
     }
@@ -139,13 +151,39 @@ public class PlayerMovement : MonoBehaviour
         if (isFrozen || groundCheck == null || wallCheck == null)
             return;
 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        isGrounded = Physics2D.OverlapCircle(
+            groundCheck.position,
+            groundCheckRadius,
+            groundLayer
+        );
 
-       bool touchingRightWall = Physics2D.Raycast(
-         wallCheck.position, Vector2.right, wallCheckDistance, wallLayer);
+        if (walkingSound != null)
+        {
+            bool walking =
+                isGrounded &&
+                Mathf.Abs(moveInput) > 0.1f &&
+                !isDashing &&
+                !isSliding;
+
+            if (walking && !walkingSound.isPlaying)
+                walkingSound.Play();
+            else if (!walking && walkingSound.isPlaying)
+                walkingSound.Stop();
+        }
+
+        bool touchingRightWall = Physics2D.Raycast(
+            wallCheck.position,
+            Vector2.right,
+            wallCheckDistance,
+            wallLayer
+        );
 
         bool touchingLeftWall = Physics2D.Raycast(
-        wallCheck.position, Vector2.left, wallCheckDistance, wallLayer);
+            wallCheck.position,
+            Vector2.left,
+            wallCheckDistance,
+            wallLayer
+        );
 
         bool touchingWall = touchingRightWall || touchingLeftWall;
         float wallJumpDirection = touchingRightWall ? -1f : 1f;
@@ -161,38 +199,49 @@ public class PlayerMovement : MonoBehaviour
             coyoteCounter -= Time.fixedDeltaTime;
         }
 
-        isWallSliding = enableWallSlide &&
-                         !isGrounded &&
-                         touchingWall &&
-                         rb.linearVelocity.y < 0f &&
-                         Mathf.Abs(moveInput) > 0.1f &&
-                         !isDashing;
+        isWallSliding =
+            enableWallSlide &&
+            !isGrounded &&
+            touchingWall &&
+            rb.linearVelocity.y < 0f &&
+            Mathf.Abs(moveInput) > 0.1f &&
+            !isDashing;
 
         if (isWallSliding)
         {
             rb.linearVelocity = new Vector2(
                 rb.linearVelocity.x,
-                Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed));
+                Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed)
+            );
         }
 
-       
-if (isWallSliding && jumpBufferCounter > 0f)
-{
-    rb.linearVelocity = new Vector2(
-        wallJumpDirection * wallJumpHorizontalBoost,
-        wallJumpForce
-    );
+        if (isWallSliding && jumpBufferCounter > 0f)
+        {
+            rb.linearVelocity = new Vector2(
+                wallJumpDirection * wallJumpHorizontalBoost,
+                wallJumpForce
+            );
 
-    jumpBufferCounter = 0f;
-    isWallSliding = false;
-    anim.SetTrigger("Jump");
-    return;
-}
+            jumpBufferCounter = 0f;
+            isWallSliding = false;
+
+            if (jumpSound != null)
+                jumpSound.Play();
+
+            if (anim != null)
+                anim.SetTrigger("Jump");
+
+            return;
+        }
 
         bool canGroundJump = coyoteCounter > 0f && !isWallSliding;
         bool canAirJump = !isGrounded && airJumpsUsed < maxAirJumps;
 
-        if (jumpBufferCounter > 0f && (canGroundJump || canAirJump) && !isDashing)
+        if (
+            jumpBufferCounter > 0f &&
+            (canGroundJump || canAirJump) &&
+            !isDashing
+        )
         {
             Jump();
 
@@ -206,12 +255,19 @@ if (isWallSliding && jumpBufferCounter > 0f)
         {
             rb.linearVelocity = new Vector2(
                 rb.linearVelocity.x,
-                rb.linearVelocity.y * jumpCutMultiplier);
+                rb.linearVelocity.y * jumpCutMultiplier
+            );
         }
 
-        if (dashPressed && Time.time >= lastDashTime + dashCooldown && !isDashing)
+        if (
+            dashPressed &&
+            Time.time >= lastDashTime + dashCooldown &&
+            !isDashing
+        )
         {
-            bool canDash = isGrounded || airDashesUsed < maxAirDashes;
+            bool canDash =
+                isGrounded ||
+                airDashesUsed < maxAirDashes;
 
             if (canDash)
             {
@@ -222,19 +278,35 @@ if (isWallSliding && jumpBufferCounter > 0f)
             }
         }
 
-        if (slidePressed && isGrounded && Mathf.Abs(moveInput) > 0.1f && !isSliding && !isDashing)
+        if (
+            slidePressed &&
+            isGrounded &&
+            Mathf.Abs(moveInput) > 0.1f &&
+            !isSliding &&
+            !isDashing
+        )
+        {
             StartCoroutine(SlideCoroutine());
+        }
 
         if (!isDashing && !isSliding && !isWallSliding)
         {
             if (isGrounded)
             {
                 ApplyGroundFriction();
-                CSGOAccelerate(moveInput, csgoMaxSpeed, csgoGroundAccel);
+                CSGOAccelerate(
+                    moveInput,
+                    csgoMaxSpeed,
+                    csgoGroundAccel
+                );
             }
             else
             {
-                CSGOAirAccelerate(moveInput, csgoMaxSpeed, csgoAirAccel);
+                CSGOAirAccelerate(
+                    moveInput,
+                    csgoMaxSpeed,
+                    csgoAirAccel
+                );
             }
 
             if (moveInput > 0f && !facingRight)
@@ -247,8 +319,19 @@ if (isWallSliding && jumpBufferCounter > 0f)
     private void Jump()
     {
         coyoteCounter = 0f;
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+        rb.linearVelocity = new Vector2(
+            rb.linearVelocity.x,
+            0f
+        );
+
+        rb.AddForce(
+            Vector2.up * jumpForce,
+            ForceMode2D.Impulse
+        );
+
+        if (jumpSound != null)
+            jumpSound.Play();
 
         if (anim != null)
             anim.SetTrigger("Jump");
@@ -259,6 +342,9 @@ if (isWallSliding && jumpBufferCounter > 0f)
         isDashing = true;
         lastDashTime = Time.time;
 
+        if (walkingSound != null && walkingSound.isPlaying)
+            walkingSound.Stop();
+
         if (anim != null)
             anim.SetTrigger("Dash");
 
@@ -267,10 +353,12 @@ if (isWallSliding && jumpBufferCounter > 0f)
 
         Vector2 dashDirection = new Vector2(
             Input.GetAxisRaw("Horizontal"),
-            Input.GetAxisRaw("Vertical"));
+            Input.GetAxisRaw("Vertical")
+        );
 
         if (dashDirection == Vector2.zero)
-            dashDirection = facingRight ? Vector2.right : Vector2.left;
+            dashDirection =
+                facingRight ? Vector2.right : Vector2.left;
 
         dashDirection.Normalize();
 
@@ -278,7 +366,9 @@ if (isWallSliding && jumpBufferCounter > 0f)
 
         while (elapsed < dashDuration)
         {
-            rb.linearVelocity = dashDirection * dashSpeed;
+            rb.linearVelocity =
+                dashDirection * dashSpeed;
+
             elapsed += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
@@ -291,16 +381,29 @@ if (isWallSliding && jumpBufferCounter > 0f)
     {
         isSliding = true;
 
+        if (walkingSound != null && walkingSound.isPlaying)
+            walkingSound.Stop();
+
         if (anim != null)
             anim.SetBool("Sliding", true);
 
-        float slideDirection = facingRight ? 1f : -1f;
+        float slideDirection =
+            facingRight ? 1f : -1f;
+
         float elapsed = 0f;
 
         while (elapsed < slideDuration && isGrounded)
         {
-            float speed = Mathf.Lerp(slideDirection * slideSpeed, 0f, slideFriction * elapsed);
-            rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
+            float speed = Mathf.Lerp(
+                slideDirection * slideSpeed,
+                0f,
+                slideFriction * elapsed
+            );
+
+            rb.linearVelocity = new Vector2(
+                speed,
+                rb.linearVelocity.y
+            );
 
             elapsed += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
@@ -312,44 +415,87 @@ if (isWallSliding && jumpBufferCounter > 0f)
         isSliding = false;
     }
 
-    private void CSGOAccelerate(float wishDirection, float wishSpeed, float acceleration)
+    private void CSGOAccelerate(
+        float wishDirection,
+        float wishSpeed,
+        float acceleration
+    )
     {
-        float currentSpeed = rb.linearVelocity.x * wishDirection;
-        float addSpeed = wishSpeed - currentSpeed;
+        float currentSpeed =
+            rb.linearVelocity.x * wishDirection;
+
+        float addSpeed =
+            wishSpeed - currentSpeed;
 
         if (addSpeed <= 0f)
             return;
 
-        float accelerationSpeed = acceleration * Time.fixedDeltaTime * wishSpeed;
-        accelerationSpeed = Mathf.Min(accelerationSpeed, addSpeed);
+        float accelerationSpeed =
+            acceleration *
+            Time.fixedDeltaTime *
+            wishSpeed;
 
-        rb.linearVelocity += new Vector2(accelerationSpeed * wishDirection, 0f);
+        accelerationSpeed =
+            Mathf.Min(
+                accelerationSpeed,
+                addSpeed
+            );
+
+        rb.linearVelocity += new Vector2(
+            accelerationSpeed * wishDirection,
+            0f
+        );
     }
 
-    private void CSGOAirAccelerate(float wishDirection, float wishSpeed, float acceleration)
+    private void CSGOAirAccelerate(
+        float wishDirection,
+        float wishSpeed,
+        float acceleration
+    )
     {
-        CSGOAccelerate(wishDirection, wishSpeed, acceleration);
+        CSGOAccelerate(
+            wishDirection,
+            wishSpeed,
+            acceleration
+        );
     }
 
     private void ApplyGroundFriction()
     {
-        float speed = Mathf.Abs(rb.linearVelocity.x);
+        float speed =
+            Mathf.Abs(rb.linearVelocity.x);
 
         if (speed < 0.1f)
             return;
 
-        float drop = speed * csgoFriction * Time.fixedDeltaTime;
-        float newSpeed = Mathf.Max(speed - drop, 0f);
+        float drop =
+            speed *
+            csgoFriction *
+            Time.fixedDeltaTime;
+
+        float newSpeed =
+            Mathf.Max(
+                speed - drop,
+                0f
+            );
 
         rb.linearVelocity = new Vector2(
-            newSpeed * Mathf.Sign(rb.linearVelocity.x),
-            rb.linearVelocity.y);
+            newSpeed *
+            Mathf.Sign(rb.linearVelocity.x),
+            rb.linearVelocity.y
+        );
     }
 
     private void Flip()
     {
         facingRight = !facingRight;
-        transform.rotation = Quaternion.Euler(0f, facingRight ? 0f : 180f, 0f);
+
+        transform.rotation =
+            Quaternion.Euler(
+                0f,
+                facingRight ? 0f : 180f,
+                0f
+            );
     }
 
     private void UpdateAnimationParameters()
@@ -357,11 +503,30 @@ if (isWallSliding && jumpBufferCounter > 0f)
         if (anim == null)
             return;
 
-        anim.SetBool("Grounded", isGrounded);
-        anim.SetBool("WallSlide", isWallSliding);
-        anim.SetBool("Dashing", isDashing);
-        anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
-        anim.SetFloat("VerticalSpeed", rb.linearVelocity.y);
+        anim.SetBool(
+            "Grounded",
+            isGrounded
+        );
+
+        anim.SetBool(
+            "WallSlide",
+            isWallSliding
+        );
+
+        anim.SetBool(
+            "Dashing",
+            isDashing
+        );
+
+        anim.SetFloat(
+            "Speed",
+            Mathf.Abs(rb.linearVelocity.x)
+        );
+
+        anim.SetFloat(
+            "VerticalSpeed",
+            rb.linearVelocity.y
+        );
     }
 
     private void OnDrawGizmosSelected()
@@ -369,14 +534,27 @@ if (isWallSliding && jumpBufferCounter > 0f)
         if (groundCheck != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+
+            Gizmos.DrawWireSphere(
+                groundCheck.position,
+                groundCheckRadius
+            );
         }
 
         if (wallCheck != null)
         {
             Gizmos.color = Color.yellow;
-            Vector3 direction = facingRight ? Vector3.right : Vector3.left;
-            Gizmos.DrawLine(wallCheck.position, wallCheck.position + direction * wallCheckDistance);
+
+            Vector3 direction =
+                facingRight
+                    ? Vector3.right
+                    : Vector3.left;
+
+            Gizmos.DrawLine(
+                wallCheck.position,
+                wallCheck.position +
+                direction * wallCheckDistance
+            );
         }
     }
 }
