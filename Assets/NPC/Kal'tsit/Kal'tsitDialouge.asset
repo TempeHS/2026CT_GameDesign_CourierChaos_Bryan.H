@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78c1776d7e455884181ccac8bc66d28e, type: 3}
+  m_Name: Kal'tsitDialouge
+  m_EditorClassIdentifier: 
+  npcName: Kal'tsit
+  npcPortrait: {fileID: -5704134678568620160, guid: 00e79e16976c5a742a71f9b97e856331, type: 3}
+  dialougeLines:
+  - Halt! Who the hell are you!
+  - uh-uh-uh-shush, you are bestoweth of the domain of the frog of wisdom. Bow before
+    him!
+  - Whenever you encounter this divine being you will have your progress saved to
+    this moment.
+  typingSpeed: 0.05
+  voiceSound: {fileID: 8300000, guid: 2b2583301ee17d5408c771cd41787d33, type: 3}
+  voicePitch: 1
+  autoProgressLines: 0100
+  autoProgressDelay: 1.5
