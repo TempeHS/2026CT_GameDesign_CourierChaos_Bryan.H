@@ -15,7 +15,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 18f;
     public float coyoteTime = 0.15f;
     public float jumpBufferTime = 0.15f;
-    [Range(0f, 1f)] public float jumpCutMultiplier = 0.5f;
+    [Range(0f, 1f)]
+    public float jumpCutMultiplier = 0.5f;
 
     [Header("Jump Sound")]
     public AudioSource jumpSound;
@@ -79,6 +80,14 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
 
         CreateMissingChecks();
+    }
+
+    private void Start()
+    {
+        if (Checkpoint.savedPosition != Vector2.zero)
+        {
+            transform.position = Checkpoint.savedPosition;
+        }
     }
 
     private void CreateMissingChecks()
@@ -158,13 +167,17 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
 
             if (anim != null)
+            {
                 anim.SetBool("isWalking", false);
+            }
 
             return;
         }
 
         if (isFrozen)
+        {
             return;
+        }
 
         moveInput =
             Input.GetAxisRaw("Horizontal");
@@ -202,9 +215,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Completely stop physics while paused.
-        // This prevents the CSGO acceleration/friction
-        // system from moving the player.
         if (PauseController.IsGamePaused)
         {
             rb.linearVelocity = Vector2.zero;
@@ -216,7 +226,9 @@ public class PlayerMovement : MonoBehaviour
             groundCheck == null ||
             wallCheck == null
         )
+        {
             return;
+        }
 
         isGrounded =
             Physics2D.OverlapCircle(
@@ -276,9 +288,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrounded)
         {
-            coyoteCounter =
-                coyoteTime;
-
+            coyoteCounter = coyoteTime;
             airJumpsUsed = 0;
             airDashesUsed = 0;
         }
@@ -324,10 +334,14 @@ public class PlayerMovement : MonoBehaviour
             isWallSliding = false;
 
             if (jumpSound != null)
+            {
                 jumpSound.Play();
+            }
 
             if (anim != null)
+            {
                 anim.SetTrigger("Jump");
+            }
 
             return;
         }
@@ -342,15 +356,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (
             jumpBufferCounter > 0f &&
-            (canGroundJump ||
-             canAirJump) &&
+            (canGroundJump || canAirJump) &&
             !isDashing
         )
         {
             Jump();
 
             if (!canGroundJump)
+            {
                 airJumpsUsed++;
+            }
 
             jumpBufferCounter = 0f;
         }
@@ -370,21 +385,20 @@ public class PlayerMovement : MonoBehaviour
 
         if (
             dashPressed &&
-            Time.time >=
-                lastDashTime +
-                dashCooldown &&
+            Time.time >= lastDashTime + dashCooldown &&
             !isDashing
         )
         {
             bool canDash =
                 isGrounded ||
-                airDashesUsed <
-                maxAirDashes;
+                airDashesUsed < maxAirDashes;
 
             if (canDash)
             {
                 if (!isGrounded)
+                {
                     airDashesUsed++;
+                }
 
                 StartCoroutine(
                     DashCoroutine()
@@ -463,10 +477,14 @@ public class PlayerMovement : MonoBehaviour
         );
 
         if (jumpSound != null)
+        {
             jumpSound.Play();
+        }
 
         if (anim != null)
+        {
             anim.SetTrigger("Jump");
+        }
     }
 
     private IEnumerator DashCoroutine()
@@ -483,7 +501,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (anim != null)
+        {
             anim.SetTrigger("Dash");
+        }
 
         float originalGravity =
             rb.gravityScale;
@@ -510,7 +530,6 @@ public class PlayerMovement : MonoBehaviour
 
         while (elapsed < dashDuration)
         {
-            // Also stop the dash if the game gets paused.
             if (PauseController.IsGamePaused)
             {
                 rb.linearVelocity =
@@ -550,10 +569,12 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (anim != null)
+        {
             anim.SetBool(
                 "Sliding",
                 true
             );
+        }
 
         float slideDirection =
             facingRight
@@ -578,11 +599,9 @@ public class PlayerMovement : MonoBehaviour
 
             float speed =
                 Mathf.Lerp(
-                    slideDirection *
-                    slideSpeed,
+                    slideDirection * slideSpeed,
                     0f,
-                    slideFriction *
-                    elapsed
+                    slideFriction * elapsed
                 );
 
             rb.linearVelocity =
@@ -599,10 +618,12 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (anim != null)
+        {
             anim.SetBool(
                 "Sliding",
                 false
             );
+        }
 
         isSliding = false;
     }
@@ -622,7 +643,9 @@ public class PlayerMovement : MonoBehaviour
             currentSpeed;
 
         if (addSpeed <= 0f)
+        {
             return;
+        }
 
         float accelerationSpeed =
             acceleration *
@@ -664,7 +687,9 @@ public class PlayerMovement : MonoBehaviour
             );
 
         if (speed < 0.1f)
+        {
             return;
+        }
 
         float drop =
             speed *
@@ -695,9 +720,7 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation =
             Quaternion.Euler(
                 0f,
-                facingRight
-                    ? 0f
-                    : 180f,
+                facingRight ? 0f : 180f,
                 0f
             );
     }
@@ -705,7 +728,9 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateAnimationParameters()
     {
         if (anim == null)
+        {
             return;
+        }
 
         anim.SetBool(
             "Grounded",
@@ -739,8 +764,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (groundCheck != null)
         {
-            Gizmos.color =
-                Color.green;
+            Gizmos.color = Color.green;
 
             Gizmos.DrawWireSphere(
                 groundCheck.position,
@@ -750,8 +774,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (wallCheck != null)
         {
-            Gizmos.color =
-                Color.yellow;
+            Gizmos.color = Color.yellow;
 
             Vector3 direction =
                 facingRight
