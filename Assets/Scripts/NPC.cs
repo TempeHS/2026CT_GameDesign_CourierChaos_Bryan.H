@@ -1,66 +1,151 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI; 
+using UnityEngine.UI;
+using System.Collections;
 
 public class NPC : MonoBehaviour, IInteractable
 {
-    public NPCDialouge dialougeData; 
+    public NPCDialouge dialougeData;
     public GameObject dialougePannel;
-    public TMP_Text dialougeText, nameText; 
-    public Image portraitImage; 
+    public TMP_Text dialougeText, nameText;
+    public Image portraitImage;
 
-    private int dialougeIndex; 
-    private bool isTyping, isDialougeActive; 
+    private int dialougeIndex;
+    private bool isTyping;
+    private bool isDialougeActive;
 
     public bool CanInteract()
     {
-        return !isDialougeActive; 
+        return !isDialougeActive;
     }
+
     public void Interact()
     {
-        if(dialougeData == null || (PauseController.IsGamePaused && !isDialougeActive))
-            return; 
+        if (dialougeData == null)
+            return;
 
-        if(isDialougeActive) 
+        if (PauseController.IsGamePaused && !isDialougeActive)
+            return;
+
+        if (isDialougeActive)
         {
-            //Next Line
+            if (isTyping)
+            {
+                StopAllCoroutines();
+
+                dialougeText.SetText(
+                    dialougeData.dialougeLines[dialougeIndex]
+                );
+
+                isTyping = false;
+            }
+            else
+            {
+                DisplayNextLine();
+            }
         }
         else
         {
-            //StartDialouge
+            StartDialouge();
         }
     }
-    void StartDialouge()
+
+    private void StartDialouge()
     {
-        isDialougeActive = true; 
-        dialougeIndex = 0; 
+        if (
+            dialougeData.dialougeLines == null ||
+            dialougeData.dialougeLines.Length == 0
+        )
+        {
+            return;
+        }
 
-        nameText.SetText(dialougeData.npcName);
-        portraitImage.sprite = dialougeData.npcPortrait; 
+        isDialougeActive = true;
+        dialougeIndex = 0;
 
-        dialougePannel.SetActive(true);
-        PauseController.SetPause(true); 
+        if (nameText != null)
+            nameText.SetText(dialougeData.npcName);
 
-        //TypeLine 
+        if (portraitImage != null)
+            portraitImage.sprite = dialougeData.npcPortrait;
+
+        if (dialougePannel != null)
+            dialougePannel.SetActive(true);
+
+        PauseController.SetPause(true);
+
+        StartCoroutine(TypeLine());
     }
 
-    IEnumorator TypeLine()
+    private IEnumerator TypeLine()
     {
-        isTyping = true; 
-        dialougeText.SetText(""); 
-
-        foreach(char letter in dialougeData.dialougeLines[dialougeIndex])
+        if (
+            dialougeData.dialougeLines == null ||
+            dialougeIndex >= dialougeData.dialougeLines.Length
+        )
         {
-            dialougeText.text += letter; 
-            yeild return new WaitForSeconds(dialougeData.typingSpeed); 
+            EndDialouge();
+            yield break;
         }
 
-        isTyping = false; 
+        isTyping = true;
+        dialougeText.SetText("");
 
-        if(dialougeData.autoProgressLines.Length > dialougeIndex && dialougeData.autoProgressLines[dialougeIndex])
+        string currentLine =
+            dialougeData.dialougeLines[dialougeIndex];
+
+        foreach (char letter in currentLine)
         {
-            yield return new WaitForSeconds(dialougeData.autoProgressDelay); 
-            //DisplayNextLine
+            dialougeText.text += letter;
+
+            yield return new WaitForSecondsRealtime(
+                dialougeData.typingSpeed
+            );
         }
+
+        isTyping = false;
+
+        if (
+            dialougeData.autoProgressLines != null &&
+            dialougeIndex < dialougeData.autoProgressLines.Length &&
+            dialougeData.autoProgressLines[dialougeIndex]
+        )
+        {
+            yield return new WaitForSecondsRealtime(
+                dialougeData.autoProgressDelay
+            );
+
+            DisplayNextLine();
+        }
+    }
+
+    private void DisplayNextLine()
+    {
+        dialougeIndex++;
+
+        if (
+            dialougeData.dialougeLines != null &&
+            dialougeIndex < dialougeData.dialougeLines.Length
+        )
+        {
+            StartCoroutine(TypeLine());
+        }
+        else
+        {
+            EndDialouge();
+        }
+    }
+
+    public void EndDialouge()
+    {
+        StopAllCoroutines();
+
+        isTyping = false;
+        isDialougeActive = false;
+
+        if (dialougePannel != null)
+            dialougePannel.SetActive(false);
+
+        PauseController.SetPause(false);
     }
 }

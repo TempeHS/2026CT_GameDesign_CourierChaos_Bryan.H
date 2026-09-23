@@ -84,78 +84,146 @@ public class PlayerMovement : MonoBehaviour
     private void CreateMissingChecks()
     {
         Collider2D playerCollider = GetComponent<Collider2D>();
+
         float bottomOffset = -0.5f;
         float sideOffset = 0.5f;
 
         if (playerCollider != null)
         {
-            bottomOffset = playerCollider.offset.y - playerCollider.bounds.extents.y;
-            sideOffset = playerCollider.offset.x + playerCollider.bounds.extents.x;
+            bottomOffset =
+                playerCollider.offset.y -
+                playerCollider.bounds.extents.y;
+
+            sideOffset =
+                playerCollider.offset.x +
+                playerCollider.bounds.extents.x;
         }
 
         if (groundCheck == null)
         {
-            Transform existingCheck = transform.Find("GroundCheck");
-            groundCheck = existingCheck != null
-                ? existingCheck
-                : CreateCheck("GroundCheck", new Vector3(0f, bottomOffset, 0f));
+            Transform existingCheck =
+                transform.Find("GroundCheck");
+
+            groundCheck =
+                existingCheck != null
+                    ? existingCheck
+                    : CreateCheck(
+                        "GroundCheck",
+                        new Vector3(0f, bottomOffset, 0f)
+                    );
         }
 
         if (wallCheck == null)
         {
-            Transform existingCheck = transform.Find("WallCheck");
-            wallCheck = existingCheck != null
-                ? existingCheck
-                : CreateCheck("WallCheck", new Vector3(sideOffset, 0f, 0f));
+            Transform existingCheck =
+                transform.Find("WallCheck");
+
+            wallCheck =
+                existingCheck != null
+                    ? existingCheck
+                    : CreateCheck(
+                        "WallCheck",
+                        new Vector3(sideOffset, 0f, 0f)
+                    );
         }
 
         if (anim == null)
+        {
             Debug.LogWarning(
                 "PlayerMovement could not find an Animator. Movement will work without animations.",
                 this
             );
+        }
     }
 
-    private Transform CreateCheck(string checkName, Vector3 localPosition)
+    private Transform CreateCheck(
+        string checkName,
+        Vector3 localPosition
+    )
     {
-        GameObject checkObject = new GameObject(checkName);
+        GameObject checkObject =
+            new GameObject(checkName);
+
         checkObject.transform.SetParent(transform);
-        checkObject.transform.localPosition = localPosition;
+        checkObject.transform.localPosition =
+            localPosition;
+
         return checkObject.transform;
     }
 
     private void Update()
     {
+        if (PauseController.IsGamePaused)
+        {
+            rb.linearVelocity = Vector2.zero;
+
+            if (anim != null)
+                anim.SetBool("isWalking", false);
+
+            return;
+        }
+
         if (isFrozen)
             return;
 
-        moveInput = Input.GetAxisRaw("Horizontal");
-        jumpPressed = Input.GetButtonDown("Jump");
-        jumpHeld = Input.GetButton("Jump");
-        dashPressed = Input.GetButtonDown("Fire3");
-        slidePressed = Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.S);
+        moveInput =
+            Input.GetAxisRaw("Horizontal");
+
+        jumpPressed =
+            Input.GetButtonDown("Jump");
+
+        jumpHeld =
+            Input.GetButton("Jump");
+
+        dashPressed =
+            Input.GetButtonDown("Fire3");
+
+        slidePressed =
+            Input.GetButtonDown("Fire1") ||
+            Input.GetKeyDown(KeyCode.S);
 
         if (jumpPressed)
-            jumpBufferCounter = jumpBufferTime;
+        {
+            jumpBufferCounter =
+                jumpBufferTime;
+        }
         else
-            jumpBufferCounter = Mathf.Max(
-                jumpBufferCounter - Time.deltaTime,
-                0f
-            );
+        {
+            jumpBufferCounter =
+                Mathf.Max(
+                    jumpBufferCounter -
+                    Time.deltaTime,
+                    0f
+                );
+        }
 
         UpdateAnimationParameters();
     }
 
     private void FixedUpdate()
     {
-        if (isFrozen || groundCheck == null || wallCheck == null)
+        // Completely stop physics while paused.
+        // This prevents the CSGO acceleration/friction
+        // system from moving the player.
+        if (PauseController.IsGamePaused)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        if (
+            isFrozen ||
+            groundCheck == null ||
+            wallCheck == null
+        )
             return;
 
-        isGrounded = Physics2D.OverlapCircle(
-            groundCheck.position,
-            groundCheckRadius,
-            groundLayer
-        );
+        isGrounded =
+            Physics2D.OverlapCircle(
+                groundCheck.position,
+                groundCheckRadius,
+                groundLayer
+            );
 
         if (walkingSound != null)
         {
@@ -165,38 +233,59 @@ public class PlayerMovement : MonoBehaviour
                 !isDashing &&
                 !isSliding;
 
-            if (walking && !walkingSound.isPlaying)
+            if (
+                walking &&
+                !walkingSound.isPlaying
+            )
+            {
                 walkingSound.Play();
-            else if (!walking && walkingSound.isPlaying)
+            }
+            else if (
+                !walking &&
+                walkingSound.isPlaying
+            )
+            {
                 walkingSound.Stop();
+            }
         }
 
-        bool touchingRightWall = Physics2D.Raycast(
-            wallCheck.position,
-            Vector2.right,
-            wallCheckDistance,
-            wallLayer
-        );
+        bool touchingRightWall =
+            Physics2D.Raycast(
+                wallCheck.position,
+                Vector2.right,
+                wallCheckDistance,
+                wallLayer
+            );
 
-        bool touchingLeftWall = Physics2D.Raycast(
-            wallCheck.position,
-            Vector2.left,
-            wallCheckDistance,
-            wallLayer
-        );
+        bool touchingLeftWall =
+            Physics2D.Raycast(
+                wallCheck.position,
+                Vector2.left,
+                wallCheckDistance,
+                wallLayer
+            );
 
-        bool touchingWall = touchingRightWall || touchingLeftWall;
-        float wallJumpDirection = touchingRightWall ? -1f : 1f;
+        bool touchingWall =
+            touchingRightWall ||
+            touchingLeftWall;
+
+        float wallJumpDirection =
+            touchingRightWall
+                ? -1f
+                : 1f;
 
         if (isGrounded)
         {
-            coyoteCounter = coyoteTime;
+            coyoteCounter =
+                coyoteTime;
+
             airJumpsUsed = 0;
             airDashesUsed = 0;
         }
         else
         {
-            coyoteCounter -= Time.fixedDeltaTime;
+            coyoteCounter -=
+                Time.fixedDeltaTime;
         }
 
         isWallSliding =
@@ -209,18 +298,27 @@ public class PlayerMovement : MonoBehaviour
 
         if (isWallSliding)
         {
-            rb.linearVelocity = new Vector2(
-                rb.linearVelocity.x,
-                Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed)
-            );
+            rb.linearVelocity =
+                new Vector2(
+                    rb.linearVelocity.x,
+                    Mathf.Max(
+                        rb.linearVelocity.y,
+                        -wallSlideSpeed
+                    )
+                );
         }
 
-        if (isWallSliding && jumpBufferCounter > 0f)
+        if (
+            isWallSliding &&
+            jumpBufferCounter > 0f
+        )
         {
-            rb.linearVelocity = new Vector2(
-                wallJumpDirection * wallJumpHorizontalBoost,
-                wallJumpForce
-            );
+            rb.linearVelocity =
+                new Vector2(
+                    wallJumpDirection *
+                    wallJumpHorizontalBoost,
+                    wallJumpForce
+                );
 
             jumpBufferCounter = 0f;
             isWallSliding = false;
@@ -234,12 +332,18 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        bool canGroundJump = coyoteCounter > 0f && !isWallSliding;
-        bool canAirJump = !isGrounded && airJumpsUsed < maxAirJumps;
+        bool canGroundJump =
+            coyoteCounter > 0f &&
+            !isWallSliding;
+
+        bool canAirJump =
+            !isGrounded &&
+            airJumpsUsed < maxAirJumps;
 
         if (
             jumpBufferCounter > 0f &&
-            (canGroundJump || canAirJump) &&
+            (canGroundJump ||
+             canAirJump) &&
             !isDashing
         )
         {
@@ -251,30 +355,40 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter = 0f;
         }
 
-        if (!jumpHeld && rb.linearVelocity.y > 0f)
+        if (
+            !jumpHeld &&
+            rb.linearVelocity.y > 0f
+        )
         {
-            rb.linearVelocity = new Vector2(
-                rb.linearVelocity.x,
-                rb.linearVelocity.y * jumpCutMultiplier
-            );
+            rb.linearVelocity =
+                new Vector2(
+                    rb.linearVelocity.x,
+                    rb.linearVelocity.y *
+                    jumpCutMultiplier
+                );
         }
 
         if (
             dashPressed &&
-            Time.time >= lastDashTime + dashCooldown &&
+            Time.time >=
+                lastDashTime +
+                dashCooldown &&
             !isDashing
         )
         {
             bool canDash =
                 isGrounded ||
-                airDashesUsed < maxAirDashes;
+                airDashesUsed <
+                maxAirDashes;
 
             if (canDash)
             {
                 if (!isGrounded)
                     airDashesUsed++;
 
-                StartCoroutine(DashCoroutine());
+                StartCoroutine(
+                    DashCoroutine()
+                );
             }
         }
 
@@ -286,14 +400,21 @@ public class PlayerMovement : MonoBehaviour
             !isDashing
         )
         {
-            StartCoroutine(SlideCoroutine());
+            StartCoroutine(
+                SlideCoroutine()
+            );
         }
 
-        if (!isDashing && !isSliding && !isWallSliding)
+        if (
+            !isDashing &&
+            !isSliding &&
+            !isWallSliding
+        )
         {
             if (isGrounded)
             {
                 ApplyGroundFriction();
+
                 CSGOAccelerate(
                     moveInput,
                     csgoMaxSpeed,
@@ -309,10 +430,20 @@ public class PlayerMovement : MonoBehaviour
                 );
             }
 
-            if (moveInput > 0f && !facingRight)
+            if (
+                moveInput > 0f &&
+                !facingRight
+            )
+            {
                 Flip();
-            else if (moveInput < 0f && facingRight)
+            }
+            else if (
+                moveInput < 0f &&
+                facingRight
+            )
+            {
                 Flip();
+            }
         }
     }
 
@@ -320,10 +451,11 @@ public class PlayerMovement : MonoBehaviour
     {
         coyoteCounter = 0f;
 
-        rb.linearVelocity = new Vector2(
-            rb.linearVelocity.x,
-            0f
-        );
+        rb.linearVelocity =
+            new Vector2(
+                rb.linearVelocity.x,
+                0f
+            );
 
         rb.AddForce(
             Vector2.up * jumpForce,
@@ -342,23 +474,35 @@ public class PlayerMovement : MonoBehaviour
         isDashing = true;
         lastDashTime = Time.time;
 
-        if (walkingSound != null && walkingSound.isPlaying)
+        if (
+            walkingSound != null &&
+            walkingSound.isPlaying
+        )
+        {
             walkingSound.Stop();
+        }
 
         if (anim != null)
             anim.SetTrigger("Dash");
 
-        float originalGravity = rb.gravityScale;
+        float originalGravity =
+            rb.gravityScale;
+
         rb.gravityScale = 0f;
 
-        Vector2 dashDirection = new Vector2(
-            Input.GetAxisRaw("Horizontal"),
-            Input.GetAxisRaw("Vertical")
-        );
+        Vector2 dashDirection =
+            new Vector2(
+                Input.GetAxisRaw("Horizontal"),
+                Input.GetAxisRaw("Vertical")
+            );
 
         if (dashDirection == Vector2.zero)
+        {
             dashDirection =
-                facingRight ? Vector2.right : Vector2.left;
+                facingRight
+                    ? Vector2.right
+                    : Vector2.left;
+        }
 
         dashDirection.Normalize();
 
@@ -366,14 +510,30 @@ public class PlayerMovement : MonoBehaviour
 
         while (elapsed < dashDuration)
         {
-            rb.linearVelocity =
-                dashDirection * dashSpeed;
+            // Also stop the dash if the game gets paused.
+            if (PauseController.IsGamePaused)
+            {
+                rb.linearVelocity =
+                    Vector2.zero;
 
-            elapsed += Time.fixedDeltaTime;
-            yield return new WaitForFixedUpdate();
+                yield return null;
+                continue;
+            }
+
+            rb.linearVelocity =
+                dashDirection *
+                dashSpeed;
+
+            elapsed +=
+                Time.fixedDeltaTime;
+
+            yield return
+                new WaitForFixedUpdate();
         }
 
-        rb.gravityScale = originalGravity;
+        rb.gravityScale =
+            originalGravity;
+
         isDashing = false;
     }
 
@@ -381,36 +541,68 @@ public class PlayerMovement : MonoBehaviour
     {
         isSliding = true;
 
-        if (walkingSound != null && walkingSound.isPlaying)
-            walkingSound.Stop();
-
-        if (anim != null)
-            anim.SetBool("Sliding", true);
-
-        float slideDirection =
-            facingRight ? 1f : -1f;
-
-        float elapsed = 0f;
-
-        while (elapsed < slideDuration && isGrounded)
+        if (
+            walkingSound != null &&
+            walkingSound.isPlaying
+        )
         {
-            float speed = Mathf.Lerp(
-                slideDirection * slideSpeed,
-                0f,
-                slideFriction * elapsed
-            );
-
-            rb.linearVelocity = new Vector2(
-                speed,
-                rb.linearVelocity.y
-            );
-
-            elapsed += Time.fixedDeltaTime;
-            yield return new WaitForFixedUpdate();
+            walkingSound.Stop();
         }
 
         if (anim != null)
-            anim.SetBool("Sliding", false);
+            anim.SetBool(
+                "Sliding",
+                true
+            );
+
+        float slideDirection =
+            facingRight
+                ? 1f
+                : -1f;
+
+        float elapsed = 0f;
+
+        while (
+            elapsed < slideDuration &&
+            isGrounded
+        )
+        {
+            if (PauseController.IsGamePaused)
+            {
+                rb.linearVelocity =
+                    Vector2.zero;
+
+                yield return null;
+                continue;
+            }
+
+            float speed =
+                Mathf.Lerp(
+                    slideDirection *
+                    slideSpeed,
+                    0f,
+                    slideFriction *
+                    elapsed
+                );
+
+            rb.linearVelocity =
+                new Vector2(
+                    speed,
+                    rb.linearVelocity.y
+                );
+
+            elapsed +=
+                Time.fixedDeltaTime;
+
+            yield return
+                new WaitForFixedUpdate();
+        }
+
+        if (anim != null)
+            anim.SetBool(
+                "Sliding",
+                false
+            );
 
         isSliding = false;
     }
@@ -422,10 +614,12 @@ public class PlayerMovement : MonoBehaviour
     )
     {
         float currentSpeed =
-            rb.linearVelocity.x * wishDirection;
+            rb.linearVelocity.x *
+            wishDirection;
 
         float addSpeed =
-            wishSpeed - currentSpeed;
+            wishSpeed -
+            currentSpeed;
 
         if (addSpeed <= 0f)
             return;
@@ -441,10 +635,12 @@ public class PlayerMovement : MonoBehaviour
                 addSpeed
             );
 
-        rb.linearVelocity += new Vector2(
-            accelerationSpeed * wishDirection,
-            0f
-        );
+        rb.linearVelocity +=
+            new Vector2(
+                accelerationSpeed *
+                wishDirection,
+                0f
+            );
     }
 
     private void CSGOAirAccelerate(
@@ -463,7 +659,9 @@ public class PlayerMovement : MonoBehaviour
     private void ApplyGroundFriction()
     {
         float speed =
-            Mathf.Abs(rb.linearVelocity.x);
+            Mathf.Abs(
+                rb.linearVelocity.x
+            );
 
         if (speed < 0.1f)
             return;
@@ -479,21 +677,27 @@ public class PlayerMovement : MonoBehaviour
                 0f
             );
 
-        rb.linearVelocity = new Vector2(
-            newSpeed *
-            Mathf.Sign(rb.linearVelocity.x),
-            rb.linearVelocity.y
-        );
+        rb.linearVelocity =
+            new Vector2(
+                newSpeed *
+                Mathf.Sign(
+                    rb.linearVelocity.x
+                ),
+                rb.linearVelocity.y
+            );
     }
 
     private void Flip()
     {
-        facingRight = !facingRight;
+        facingRight =
+            !facingRight;
 
         transform.rotation =
             Quaternion.Euler(
                 0f,
-                facingRight ? 0f : 180f,
+                facingRight
+                    ? 0f
+                    : 180f,
                 0f
             );
     }
@@ -520,7 +724,9 @@ public class PlayerMovement : MonoBehaviour
 
         anim.SetFloat(
             "Speed",
-            Mathf.Abs(rb.linearVelocity.x)
+            Mathf.Abs(
+                rb.linearVelocity.x
+            )
         );
 
         anim.SetFloat(
@@ -533,7 +739,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (groundCheck != null)
         {
-            Gizmos.color = Color.green;
+            Gizmos.color =
+                Color.green;
 
             Gizmos.DrawWireSphere(
                 groundCheck.position,
@@ -543,7 +750,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (wallCheck != null)
         {
-            Gizmos.color = Color.yellow;
+            Gizmos.color =
+                Color.yellow;
 
             Vector3 direction =
                 facingRight
@@ -553,7 +761,8 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.DrawLine(
                 wallCheck.position,
                 wallCheck.position +
-                direction * wallCheckDistance
+                direction *
+                wallCheckDistance
             );
         }
     }

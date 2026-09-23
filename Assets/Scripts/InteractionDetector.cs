@@ -4,11 +4,13 @@ using UnityEngine.InputSystem;
 public class InteractionDetector : MonoBehaviour
 {
     private IInteractable interactableInRange = null;
+
     public GameObject interactionIcon;
 
-    void Start()
+    private void Start()
     {
-        interactionIcon.SetActive(false);
+        if (interactionIcon != null)
+            interactionIcon.SetActive(false);
     }
 
     public void OnInteract(InputAction.CallbackContext context)
@@ -21,19 +23,29 @@ public class InteractionDetector : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out IInteractable interactable) && interactable.CanInteract())
+        if (collision.TryGetComponent<IInteractable>(out IInteractable interactable))
         {
-            interactableInRange = interactable;
-            interactionIcon.SetActive(true);
+            if (interactable.CanInteract())
+            {
+                interactableInRange = interactable;
+
+                if (interactionIcon != null)
+                    interactionIcon.SetActive(true);
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out IInteractable interactable) && interactable == interactableInRange)
+        if (collision.TryGetComponent<IInteractable>(out IInteractable interactable))
         {
-            interactableInRange = null;
-            interactionIcon.SetActive(false);
+            if (interactable == interactableInRange)
+            {
+                interactableInRange = null;
+
+                if (interactionIcon != null)
+                    interactionIcon.SetActive(false);
+            }
         }
     }
 }

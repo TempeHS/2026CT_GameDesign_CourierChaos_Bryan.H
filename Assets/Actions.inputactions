@@ -39,6 +39,15 @@
                     "id": "70b647c0-681d-4fab-ba15-d4f715861f63",
                     "expectedControlType": "",
                     "processors": "",
+                    "interactions": "Tap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "TipsMenu",
+                    "type": "Button",
+                    "id": "e810b61c-66c2-4782-8b25-f38478ff06ff",
+                    "expectedControlType": "",
+                    "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 }
@@ -268,10 +277,21 @@
                     "name": "",
                     "id": "a6f06d7c-6b84-43e6-acca-e0df060f93c8",
                     "path": "<Keyboard>/f",
-                    "interactions": "",
+                    "interactions": "Tap",
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2f502340-d73f-455c-81a2-b9610771f992",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TipsMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
