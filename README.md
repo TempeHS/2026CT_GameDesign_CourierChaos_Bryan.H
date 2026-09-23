@@ -59,29 +59,36 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 
 ### 2.1 Full Gameplay Walkthrough
 
-<!--
-  Embed a YouTube/Vimeo video or link to a file in the repository.
-  YouTube embed syntax:
-  [![Video Title](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
 
-  OR link to a local file:
-  [Watch Walkthrough Video](./docs/video/walkthrough.mp4)
--->
+  [![Video Title](https://img.youtube.com/vi/sEFqQlF8fIc/0.jpg)](https://youtu.be/sEFqQlF8fIc)
+
+ 
 
 | Field | Detail |
 |---|---|
-| **Video Title** | |
-| **Link / Embed** | |
-| **Duration** | |
-| **Description** | |
+| **Bryan Huang Courier Chaos** | |
+| **https://youtu.be/sEFqQlF8fIc** | |
+| **1:54** | |
+| **2026 CT T3 Tempe HS** | |
 
 ### 2.2 Feature Highlight Clips
 
-| Clip | Description | Link |
+| Clip | Description | Timestamp In video  |
 |---|---|---|
-| | | |
-| | | |
-| | | |
+| Main Menu | Demonstration of the main menu| 0:04 - 0:17 |
+| Dialouge System | Demo of the dialouge system | 0:18 - 0:25 |
+| Player Pickup| Pickup system| 0:28 - 0:30 |
+| Both Menus |Showcases both help menu and main pause menu | 0:31 - 0:40 |
+| Out of Bounds|Showcases the out of bounds system | 0:41 - 0:44 |
+| Parallax and Jumping/walking effects| Demonstration of the ininite parallax and Sound effects |0:45 - 0:49 |
+| Air jumps and wall climb| Highlights some more radical features of added movement|0:50-0:53 |
+|Coyote jump and CSGO insipired movement implimentation |Added aspects of semi-linear movement |0:53 - 0:56 |
+|BGM | Sourcing BGM music |0:57 - 1:00 |
+|NPC showcase | Highlighting the UI and text elements of NPC and the interact detection system| 1:01 - 1:19|
+|Checkpoint showcase |Demonstrating the savepoint and how it differs from out of bounds |1:20 - 1:43 |
+
+
+
 
 ---
 
@@ -146,12 +153,8 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 
 | Effect Name | Purpose | Screenshot |
 |---|---|---|
-| | | |
-| | | |
-| | | |
-| | | |
+|N/A |N/A |N/A |
 
-> Add screenshot images using: `![Effect Name](./docs/screenshots/effect_name.png)`
 
 ---
 
@@ -159,11 +162,9 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 
 | Cut Scene | Trigger | Description | Screenshot / Still |
 |---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
+| N/A| N/A| N/A|N/A |
 
-> Add screenshot images using: `![Cut Scene Name](./docs/screenshots/cutscene_name.png)`
+
 
 ---
 
@@ -171,11 +172,11 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 
 | Animation | Object / Character | Description | Screenshot |
 |---|---|---|---|
-| Walking | Player character | The walking animation uses the sprite animation in `Assets/Animations/walk.anim`. | |
-| Idle Down | Player character | The idle animation is stored in `Assets/Animations/Idle Down.anim`. | |
-| Jump / Dash / Slide | Player character | The movement script changes the Animator state when the player jumps, dashes, walks, or slides. | |
+| Walking | Player character | The walking animation uses the sprite animation in `Assets/Animations/walk.anim`. (broken) | ![](./Screenshots/1.png)|
+| Idle Down | Player character | The idle animation is stored in `Assets/Animations/Idle Down.anim`. |![](./Screenshots/2.png) |
+| Jump / Dash / Slide | Player character | The movement script changes the Animator state when the player jumps, dashes, walks, or slides. (Broken)|  ![](./Screenshots/3.png) ![](./Screenshots/4.png)|
 
-> Add screenshot images using: `![Animation Name](./docs/screenshots/animation_name.png)`
+ 
 
 ---
 
@@ -183,11 +184,7 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 
 | Feature | Description | Screenshot |
 |---|---|---|
-| | | |
-| | | |
-| | | |
-
-> Add screenshot images using: `![Feature Name](./docs/screenshots/lighting_name.png)`
+| N/A|N/A | N/A|
 
 ---
 
@@ -195,26 +192,21 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 
 | Shader / Material | Applied To | Description | Screenshot |
 |---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
+| N/A| N/A| N/A|N/A |
 
-> Add screenshot images using: `![Shader Name](./docs/screenshots/shader_name.png)`
+
 
 ---
 
 ### 4.6 Additional Visual Screenshots
 
-<!--
-  Add any other notable screenshots here.
-  Syntax: ![Description](./docs/screenshots/filename.png)
--->
+
 
 | Description | Screenshot |
 |---|---|
-| | |
-| | |
-| | |
+| Clean Dialouge| ![](./Screenshots/5.png) |
+| NPC Interaction|  ![](./Screenshots/6.png) |
+
 
 ---
 
@@ -223,18 +215,19 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 ### 5.1 Music
 | Track | Scene / Trigger | Source / Composer |
 |---|---|---|
-| `Courier Chaos BGM.MP3` | Background music asset available in `Assets/Audio`. Exact scene assignment is configured in Unity. | Not recorded in repository |
-| `0921.MP3` | Audio asset available in `Assets/Audio`; exact trigger is configured in Unity. | Not recorded in repository |
-| `TheFatRat_-_Xenogenesis_(mp3.pm).mp3` | Audio asset available in `Assets/Audio`; exact scene assignment is configured in Unity. | The FatRat / source and licence must be confirmed by the student |
-| `skyrim-npc-music-harvest-dawn.mp3` | Audio asset available in `Assets/Audio`; likely NPC/dialogue use, but exact assignment must be confirmed in Unity. | Source and licence must be confirmed by the student |
+| `Courier Chaos BGM.MP3` | Background music asset available in `Assets/Audio`. ; BGM for game | Mix of tracks from Yu-Peng Chen's music from Genshin Impact |
+| `0921.MP3` | Audio asset available in `Assets/Audio`; Used as sound effects for walking | By Minecraft |
+| `TheFatRat_-_Xenogenesis_(mp3.pm).mp3` | Audio asset available in `Assets/Audio`; Used In the Main menu . | TheFatRat, Royalty free "Xenogenisis" |
+| `skyrim-npc-music-harvest-dawn.mp3` | Audio asset available in `Assets/Audio`; For dialouge bgm, Did not fully work| Skyrim's Sound |
+
 
 ### 5.2 Sound Effects
 | Sound Effect | Trigger | Source |
 |---|---|---|
 | Jump sound | Plays when the player jumps or wall-jumps. | `PlayerMovement.jumpSound` |
-| Walking sound | Plays while the player is moving on the ground and stops when they become idle, airborne, dashing, or sliding. | `PlayerMovement.walkingSound` |
-| Checkpoint sound | Plays the first time a checkpoint is activated. | `Checkpoint.checkpointSound` |
-| Other imported effects | `action_jump.mp3` and `slap-soundmaster13-49669815_4L20wGP.mp3` are present in `Assets/Audio`; exact use and licence should be confirmed. | Source not recorded |
+| Walking sound | Plays while the player is moving on the ground and stops when they become idle, airborne, dashing, or sliding. | Minecraft's Sound effects |
+| Checkpoint sound | Plays the first time a checkpoint is activated. `slap-soundmaster13-49669815_4L20wGP.mp3` action_jump is used for jumping sound effects and slap is for the notification of reaching a checkpoint. | `Checkpoint.checkpointSound` - SoundEffects|
+| Other imported effects | `action_jump.mp3` in `Assets/Audio`; action_jump is used for jumping sound effects and slap is for the notification of reaching a checkpoint. | Roblox |
 
 ### 5.3 Audio Implementation
 | Feature | Description |
@@ -250,22 +243,22 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 ### 6.1 HUD Elements
 | Element | Purpose | Screenshot |
 |---|---|---|
-| Velocity display | Shows the player’s horizontal velocity, vertical velocity, and overall speed using TextMesh Pro. | |
-| Interaction icon | Lets the player know when they are close enough to interact with an NPC or object. | |
-| Dialogue panel | Shows the NPC’s name, portrait, and dialogue one character at a time. | |
+| Velocity display | Shows the player’s horizontal velocity, vertical velocity, and overall speed using TextMesh Pro. (Does not work) |N/A |
+| Interaction icon | Lets the player know when they are close enough to interact with an NPC or object. |![](./Screenshots/13.png) |
+| Dialogue panel | Shows the NPC’s name, portrait, and dialogue one character at a time. | ![](./Screenshots/14.png)|
 
-> Add screenshot images using: `![HUD Element](./docs/screenshots/hud_name.png)`
+![](./Screenshots/11.png)
 
 ### 6.2 Menus
 | Menu | Purpose | Screenshot |
 |---|---|---|
-| Main Menu | Starts the `Main` scene and provides an exit button. | |
-| Pause Menu | Toggled with Tab and controlled through `PauseController`. | |
-| Tips Screen | Toggled with H through `TipsMenuController`. | |
-| Dialogue Menu | Pauses gameplay while NPC dialogue is active. | |
-| Game Over Screen | No dedicated game-over controller is present in the inspected scripts. | |
+| Main Menu | Starts the `Main` scene and provides an exit button. | ![](./Screenshots/7.png)|
+| Pause Menu | Toggled with Tab and controlled through `PauseController`. |![](./Screenshots/8.png) |
+| Tips Screen | Toggled with H through `TipsMenuController`. |![](./Screenshots/9.png) |
+| Dialogue Menu | Pauses gameplay while NPC dialogue is active. |![](./Screenshots/10.png) |
+| Game Over Screen | No dedicated game-over controller is present in the inspected scripts. | N/A|
 
-> Add screenshot images using: `![Menu Name](./docs/screenshots/menu_name.png)`
+
 
 ---
 
@@ -280,11 +273,10 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 ### 7.2 Level / Environment Screenshots
 | Level / Area | Description | Screenshot |
 |---|---|---|
-| | | |
-| | | |
-| | | |
+|1 |A strange area without many people, it seems like whoever our courier is delivering to likes to be alone. | ![](./Screenshots/12.png)|
 
-> Add screenshot images using: `![Level Name](./docs/screenshots/level_name.png)`
+
+
 
 ### 7.3 Scene Management
 | Feature | Description |
@@ -334,14 +326,13 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 
 | # | Title | Author / Creator | URL / Source | What You Used It For | What You Changed / Adapted |
 |---|---|---|---|---|---|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
-| 4 | | | | | |
-| 5 | | | | | |
-| 6 | | | | | |
-| 7 | | | | | |
-| 8 | | | | | |
+| 1 | Add NPC and Dialogue System to your Game - Top Down Unity 2D #19| Game Code Library| https://www.youtube.com/watch?v=eSH9mzcMRqw| To Develop NPC dialouge system and icon | Changed parts of code which interfered with the scene loading|
+| 2 | Making a 2D Platformer In Unity 6  - Episode 31 (Checkpoints)|Game Code Library | https://www.youtube.com/watch?v=kkPtPHTTJaU| Used for main checkpoint|Added sound effects and death mechanic|
+| 3 | Idle and Walking Player Animations - Top Down Unity 2D #2|Game Code Library |https://www.youtube.com/watch?v=82U4ToJU-28&list=PLaaFfzxy_80HtVvBnpK_IjSC8_Y9AOhuP&index=4&pp=iAQB | Used for early movement development and animations|Ditched animations and completly rehaulled movement |
+| 4 | Menu UI with Tab Switching - Top Down Unity 2D #6|Game Code Library |https://www.youtube.com/watch?v=fspxIduosYQ&list=PLaaFfzxy_80HtVvBnpK_IjSC8_Y9AOhuP&index=19&pp=iAQB | Learnt how to make Menus| Did not follow original steps, replaced with own design|
+| 5 | Pickup Items and Add to Inventory UI - Top Down Unity 2D #10| Game Code Library|https://www.youtube.com/watch?v=liba3xGI4gM&list=PLaaFfzxy_80HtVvBnpK_IjSC8_Y9AOhuP&index=8&pp=iAQB | How to make destructable pick up objects for player | Did not use inventory system |
+| 6 | Add a Pause System to your Game! - Top Down Unity 2D #17|Game Code Library |https://www.youtube.com/watch?v=fspxIduosYQ&list=PLaaFfzxy_80HtVvBnpK_IjSC8_Y9AOhuP&index=19&pp=iAQB |Used code from menu to create pause menu | Skiped unessisary UI parts and changed the original idea|
+| 7 | My Life As An Alchemist|Delirium Tremens Games | https://store.steampowered.com/app/2839500/My_Life_As_An_Alchemist/ |Parallax Background | Cropped using screenshot|
 
 ---
 
@@ -349,19 +340,21 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 
 > All third-party assets (art, audio, fonts, scripts, packages) must be listed here with their licence. Using an asset without acknowledgement may constitute academic misconduct.
 
+
+
 ### 10.1 Visual Assets
 | Asset Name | Type | Creator / Source | Licence | URL | Used For |
 |---|---|---|---|---|---|
-| Player/background sprites | 2D sprites | Source not recorded in repository | Must be confirmed by the student | | Player and environment visuals |
+| Player/background sprites | 2D sprites | Source not recorded in repository | Free for anyone/ royalty free |https://pixel-boy.itch.io/ninja-adventure-asset-pack | Player and environment visuals |
 | TextMesh Pro resources | UI resources | Unity Technologies / TextMesh Pro package | Unity package licence | https://docs.unity3d.com/Packages/com.unity.textmeshpro@latest/ | Text and UI support |
 
 ### 10.2 Audio Assets
 | Asset Name | Type | Creator / Source | Licence | URL | Used For |
 |---|---|---|---|---|---|
-| `Courier Chaos BGM.MP3` | Music | Source not recorded | Must be confirmed by the student | | Background music |
-| `action_jump.mp3` | Sound effect | Source not recorded | Must be confirmed by the student | | Jump audio candidate |
-| `TheFatRat_-_Xenogenesis_(mp3.pm).mp3` | Music | The FatRat / downloaded source name | Licence and permission must be confirmed | | Imported music asset |
-| `skyrim-npc-music-harvest-dawn.mp3` | Music | Source not recorded | Licence and permission must be confirmed | | Imported music asset |
+| `Courier Chaos BGM.MP3` | Music | Custom Mix from music made by Yu-Peng Chen and his Genshin Impact BGM | All licences remain to HOYO-MiX  | | Background music |
+| `action_jump.mp3` | Sound effect | Free Roblox Sound effect | Royalty free on sound effects website | | Jump audio candidate |
+| `TheFatRat_-_Xenogenesis_(mp3.pm).mp3` | Music | The FatRat / downloaded source name | By TheFatRat, all music made by him | | Imported music asset |
+| `skyrim-npc-music-harvest-dawn.mp3` | Music | InstantSoundEffects |  N/A | | Imported music asset |
 
 ### 10.3 Scripts & Code Snippets
 | Script / Snippet | Source | Licence | URL | Used For | Changes Made |
@@ -381,7 +374,7 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 | Font Name | Creator / Source | Licence | URL |
 |---|---|---|---|
 | Liberation Sans | TextMesh Pro package | SIL Open Font License; licence file included in project | https://scripts.sil.org/OFL |
-| Unity / Roboto / Oswald / Bangers / Anton | TextMesh Pro examples and extras | Licence files are included beside the fonts; verify which fonts are used | |
+| Unity / Roboto / Oswald / Bangers / Anton | TextMesh Pro examples and extras | Licence files are included beside the fonts; verify which fonts are used |N/A |
 
 ---
 
@@ -398,8 +391,7 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 ---
 
 ## 12. Branch Development Summary
-
-> One section per feature branch. Add or remove sections to match your repository. Branches should be named for the feature they implement e.g. `feature/player-movement`. Link each branch name directly to the branch in your GitHub repository.
+Not many branches were used, few arn't documented because they were never commited. Mainly branches were used as a means for testing and not actual heavy development in the game. 
 
 ---
 
@@ -409,8 +401,8 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 |---|---|
 | **Branch Name** | `main` |
 | **Purpose** | Stable, releasable version of the game |
-| **Merged From** | |
-| **Final Commit** | |
+| **Merged From** | Original|
+| **Final Commit** |"WIP IDK ANYMORE" |
 
 ---
 
@@ -418,31 +410,30 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 
 | Field | Detail |
 |---|---|
-| **Branch Name** | |
-| **Feature Developed** | |
-| **Merged Into** | |
-| **Date Started** | |
-| **Date Merged** | |
+| **Branch Name** |Camera |
+| **Feature Developed** | Early work on camera and Cinamachine|
+| **Merged Into** |Main |
+| **Date Started** | June 15th|
+| **Date Merged** | June 15th|
 
 #### What Was Built
-<!-- Describe what this branch added or changed -->
+Messed around with camera and skybox features. 
 
 #### Key Commits
 | Commit Message | What Changed |
 |---|---|
-| | |
-| | |
-| | |
+| WIP More Camera|Settings on Main Camera changed |
+| WIP Skybox Colours |Skybox changed colours |
+
 
 #### Problems Encountered & Resolved
 | Problem | Resolution |
 |---|---|
-| | |
-| | |
+| N/A| N/A|
+
 
 #### Screenshot / Evidence
-<!-- Add a screenshot of the feature working -->
-> `![Feature Name](./docs/screenshots/branch_feature_name.png)`
+Not applicable. 
 
 ---
 
@@ -450,139 +441,53 @@ Courier Chaos is a 2D platform action game where the player takes on the role of
 
 | Field | Detail |
 |---|---|
-| **Branch Name** | |
-| **Feature Developed** | |
-| **Merged Into** | |
-| **Date Started** | |
-| **Date Merged** | |
+| **Branch Name** | Tileset|
+| **Feature Developed** |Tilemap and sprite implimentation |
+| **Merged Into** | Main|
+| **Date Started** |June 17th |
+| **Date Merged** |June 17th |
 
 #### What Was Built
-
+Main tilemap useage and sprite rendering 
 
 #### Key Commits
 | Commit Message | What Changed |
 |---|---|
-| | |
-| | |
-| | |
+| WIP added more assets, tilemap mostly fixed + more| Imported Large Tilemap set + fixing rendering of tilemap|
+|WIP chest cs fah |Working on chest design, animation and more |
+| WIP freaking bookimboaob animatioms| Animations worked on|
 
 #### Problems Encountered & Resolved
 | Problem | Resolution |
 |---|---|
-| | |
-| | |
+|Timemap not working | Fully configured tilemap|
+|Animation glitches | Somewhat resolved through splicing animation timings|
 
 #### Screenshot / Evidence
-> `![Feature Name](./docs/screenshots/branch_feature_name.png)`
+> ![Timemap Usage](./Screenshots/Tilemap%20Usage.png)
 
 ---
 
-### Branch 4 — `"-best save"`
+### Branch 4 — N/A
 
-| Field | Detail |
-|---|---|
-| **Branch Name** | |
-| **Feature Developed** | |
-| **Merged Into** | |
-| **Date Started** | |
-| **Date Merged** | |
-
-#### What Was Built
-
-
-#### Key Commits
-| Commit Message | What Changed |
-|---|---|
-| WIP added movement asset + first gamescene| Added many .meta files, mainly on playerinput and character rednering |
-| | |
-| | |
-
-#### Problems Encountered & Resolved
-| Problem | Resolution |
-|---|---|
-| | |
-| | |
-
-#### Screenshot / Evidence
-> `![Feature Name](./docs/screenshots/branch_feature_name.png)`
 
 ---
 
-### Branch 5 — `feature/`
+### Branch 5 — N/A
 
-| Field | Detail |
-|---|---|
-| **Branch Name** | |
-| **Feature Developed** | |
-| **Merged Into** | |
-| **Date Started** | |
-| **Date Merged** | |
-
-#### What Was Built
-
-
-#### Key Commits
-| Commit Message | What Changed |
-|---|---|
-| | |
-| | |
-| | |
-
-#### Problems Encountered & Resolved
-| Problem | Resolution |
-|---|---|
-| | |
-| | |
-
-#### Screenshot / Evidence
-> `![Feature Name](./docs/screenshots/branch_feature_name.png)`
-
----
-
-### Branch 6 — `feature/`
-
-| Field | Detail |
-|---|---|
-| **Branch Name** | |
-| **Feature Developed** | |
-| **Merged Into** | |
-| **Date Started** | |
-| **Date Merged** | |
-
-#### What Was Built
-
-
-#### Key Commits
-| Commit Message | What Changed |
-|---|---|
-| | |
-| | |
-| | |
-
-#### Problems Encountered & Resolved
-| Problem | Resolution |
-|---|---|
-| | |
-| | |
-
-#### Screenshot / Evidence
-> `![Feature Name](./docs/screenshots/branch_feature_name.png)`
 
 ---
 
 ### Branch Development Overview
 
-> Complete this summary table once all branches are finished.
 
 | Branch Name | Feature | Date Started | Date Merged | Status |
 |---|---|---|---|---|
-| `main` | Stable release | | | |
-| `feature/` | | | | |
-| `feature/` | | | | |
-| `feature/` | | | | |
-| `feature/` | | | | |
-| `feature/` | | | | |
+| `main` | Stable release |18th May | Present|Active |
+| `Camera` | Camera/skybox testing| 15th June|15th June |Stale |
+| `Tilemap` |Tilemap Development |17th June |17th June |Stale |
+
 
 ---
 
-> **Student Declaration:** All work submitted is my own except where explicitly acknowledged above.
+**Student Declaration:** All work submitted is my own except where explicitly acknowledged above.
