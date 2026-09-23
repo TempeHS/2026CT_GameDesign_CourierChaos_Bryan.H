@@ -32,26 +32,26 @@
 
 
 ### 1.1 Genre
-2d Platformer - Adventure
+2d Platformer
 
 ### 1.2 Target Audience
-Ages 7+
+Ages 7-15
 
 ### 1.3 Game Summary
-Courier Chaos is a platform roleplayer action game revolving around you - the courier. Your goal is to deliver packages on time and not get lost in the labyrinth of packages! 
+Courier Chaos is a 2D platform action game where the player takes on the role of a courier. The aim is to travel through the level, collect parcels, talk to NPCs, and make it to the end of the route. I wanted the movement to feel quick and satisfying, so the player can jump, air-jump, dash, slide, and use walls to move around the level.
 
 ### 1.4 Win / Loss Conditions
 | Condition | Description |
 |---|---|
-| Win |Reaching Houses / Completing Levels / Delivering Parcles |
-| Loss |Falling, Death |
+| Win |Reaching the end of the route and completing the level. The exact finish trigger depends on the scene. |
+| Loss |Falling into a death zone or leaving the playable area. If a checkpoint has been activated, the player returns to it. |
 
 ### 1.5 Platform & Build Settings
 | Setting | Detail |
 |---|---|
 | Target Platform | PC |
 | Resolution |Any 16:9 Aspect Ratio |
-| Build Type |Windows 32x - 64x - 86x |
+| Build Type |Windows PC (exact architecture should be confirmed in Unity Build Settings) |
 
 ---
 
@@ -90,51 +90,56 @@ Courier Chaos is a platform roleplayer action game revolving around you - the co
 ### 3.1 Core Mechanics
 | ID | Mechanic | Description | Implemented In (Script/Object) |
 |---|---|---|---|
-| M-1 |Bouding System |Whenever player crosses intro area with TP box, teleports player back to spawn to prevent out of bounds without making the player feel caged. | Is "OutOfBounds.cs" and implimented in fade elements and both out of bounds triggers.|
-| M-2 |Unique Movement |Movement is not 100% linear. It mixes a few aspects from velocity control, accelleration curves and adds friction to object touch. Derived state dependant overrides the classic linear movemment and presents as peicewise linear. | Physics, added to "Player Movement.cs", implimented in player.|
-| M-3 |Falling Walljumps |When players are hanging on the side of a wall, they are able to jump whilst still touching the wall, the caveat being that they are only allowed to jump when they are falling.  | Implemented in "Player Movement.cs" and used on the player alongside gameobject "wallCheck"|
-| M-4 | Dialouge System | Managing in-game dialouge and allows converse or instructions to progress story. |"DIALOUGE.cs" is implemented in the first scence of the game, inside of Package simple_0 > Canvas > pickupText. |
-| M-5 |  | | |
+| M-1 | Movement and acceleration | The player accelerates up to a maximum speed. Ground and air movement use different acceleration values, with friction slowing the player down. | `PlayerMovement.cs` |
+| M-2 | Jumping | The player can jump from the ground and perform up to three air jumps. Coyote time and jump buffering make the controls feel more forgiving. | `PlayerMovement.cs` |
+| M-3 | Dash and slide | The dash gives the player a quick burst of movement, while the slide lets them keep moving quickly along the ground. | `PlayerMovement.cs` |
+| M-4 | Wall movement | The player can slide down walls and jump away from them when wall movement is enabled. | `PlayerMovement.cs` |
+| M-5 | Parcels and checkpoints | Parcels disappear when collected, and checkpoints save the player’s position for respawning. | `ParcelController.cs`, `Checkpoint.cs`, `DeathZone.cs` |
+| M-6 | NPC interaction | An icon appears near an NPC, allowing the player to interact and read dialogue with names and portraits. | `InteractionDetector.cs`, `NPC.cs`, `NPC Dialouge.cs` |
 
 ### 3.2 Player Controls
 | Action | Input (Keyboard / Controller) | Description |
 |---|---|---|
-|Jump | Space Bar | Allows player to leap into air and air jump 3 times. |
-|Moveleft |A |Moves player to the left. |
-|Moveright |D |Moves Player to  the right. |
-|Dash /// Broken|Shift |Sudden leap of power second to a horizontal jump. |
-|Slides /// Broken| Ctrl | When going at velocity, player can skid across the ground gaining speed.| 
+| Jump | Space Bar / configured `Jump` input | Ground jump plus up to three air jumps. |
+| Move left/right | A/D or arrow keys | Horizontal movement with acceleration and friction. |
+| Dash | Configured `Fire3` input | A short directional burst; one air dash is available before landing. |
+| Slide | Configured `Fire1` input or S | A short ground slide that preserves forward momentum. |
+| Interact | Input System `Interact` action | Interacts with a nearby NPC or other `IInteractable` object. |
+| Pause | Tab | Opens or closes the pause menu. |
+| Tips | H | Opens or closes the tips panel. |
 
 ### 3.3 Physics & Collision
 | Feature | Description |
 |---|---|
-|"CSGO air" | Acceleration and Friction implimentation insipred by Counter-Strike, controls set airspeeds and speed at which the player slows down on the ground and on the wall. Was going to try implementing slide cancelling and bunnoy-hops but did'nt work out too well. |
-|Arcade style - velocity based movement |Predictable movement paths, instant directional change and snappy controls. The essence of a good platformer. |
-|Collision System |A mixed base of raycast and overlap checks. (finish please) |
+| Rigidbody2D movement | The player uses Unity’s 2D physics system, with movement updated in `FixedUpdate`. |
+| Ground and wall checks | OverlapCircle checks detect the ground; raycasts detect left and right walls. |
+| Collision triggers | Trigger colliders are used for parcels, checkpoints, death zones, out-of-bounds areas, and NPC interaction ranges. |
+| Respawning | `DeathZone` returns the player to the static checkpoint position when available. |
 
 ### 3.4 Game Loop
 | Stage | Description |
 |---|---|
-| Start / Initialisation | |
-| Core Loop | |
-| Win / End State | |
-| Restart | |
+| Start / Initialisation | The start menu loads the scene named `Main`. The player also creates the ground and wall checks automatically if they are missing. |
+| Core Loop | The player moves through the level, collects parcels, activates checkpoints, and talks to NPCs while avoiding hazards. |
+| Win / End State | The repository scripts do not contain a universal win-condition controller; the finish behaviour is configured by the scene. |
+| Restart | Death zones respawn the player at the last checkpoint. A full scene restart can be configured through Unity scene/build settings. |
 
 ### 3.5 Scoring & Progression
 | Element | Description |
 |---|---|
-| Scoring System | |
-| Difficulty Progression | |
-| Unlockables / Levels | |
+| Scoring System | There is currently no score counter. Parcels are collected as part of the level objective. |
+| Difficulty Progression | Difficulty is created through platforming hazards, gaps, walls, out-of-bounds areas, and the level layout. |
+| Unlockables / Levels | No unlock system is implemented in the inspected scripts. The start menu loads the `Main` scene. |
 
 ---
 
 ## 4. Visual Features
 
-Parallax - Background moves with the character to gain more visual depth  
-Infinite background - Allows player to fully explore the playable map without an extrememly large background art
-No compressed images - Allows sprites and objects to remain clear close up
-Detailed Sprites - Most sprites have multiple layers in the map 
+**Parallax** – The background moves at a different speed from the player, which gives the level more depth.
+
+**Repeating background** – The background can repeat as the player explores, so one extremely large image is not needed.
+
+**Clear sprites** – Keeping the images high quality helps the sprites stay sharp when viewed up close.
 
 
 ### 4.1 Particle Effects
@@ -166,9 +171,9 @@ Detailed Sprites - Most sprites have multiple layers in the map
 
 | Animation | Object / Character | Description | Screenshot |
 |---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
+| Walking | Player character | The walking animation uses the sprite animation in `Assets/Animations/walk.anim`. | |
+| Idle Down | Player character | The idle animation is stored in `Assets/Animations/Idle Down.anim`. | |
+| Jump / Dash / Slide | Player character | The movement script changes the Animator state when the player jumps, dashes, walks, or slides. | |
 
 > Add screenshot images using: `![Animation Name](./docs/screenshots/animation_name.png)`
 
@@ -218,23 +223,25 @@ Detailed Sprites - Most sprites have multiple layers in the map
 ### 5.1 Music
 | Track | Scene / Trigger | Source / Composer |
 |---|---|---|
-| | | |
-| | | |
+| `Courier Chaos BGM.MP3` | Background music asset available in `Assets/Audio`. Exact scene assignment is configured in Unity. | Not recorded in repository |
+| `0921.MP3` | Audio asset available in `Assets/Audio`; exact trigger is configured in Unity. | Not recorded in repository |
+| `TheFatRat_-_Xenogenesis_(mp3.pm).mp3` | Audio asset available in `Assets/Audio`; exact scene assignment is configured in Unity. | The FatRat / source and licence must be confirmed by the student |
+| `skyrim-npc-music-harvest-dawn.mp3` | Audio asset available in `Assets/Audio`; likely NPC/dialogue use, but exact assignment must be confirmed in Unity. | Source and licence must be confirmed by the student |
 
 ### 5.2 Sound Effects
 | Sound Effect | Trigger | Source |
 |---|---|---|
-| | | |
-| | | |
-| | | |
-| | | |
+| Jump sound | Plays when the player jumps or wall-jumps. | `PlayerMovement.jumpSound` |
+| Walking sound | Plays while the player is moving on the ground and stops when they become idle, airborne, dashing, or sliding. | `PlayerMovement.walkingSound` |
+| Checkpoint sound | Plays the first time a checkpoint is activated. | `Checkpoint.checkpointSound` |
+| Other imported effects | `action_jump.mp3` and `slap-soundmaster13-49669815_4L20wGP.mp3` are present in `Assets/Audio`; exact use and licence should be confirmed. | Source not recorded |
 
 ### 5.3 Audio Implementation
 | Feature | Description |
 |---|---|
-| Audio Mixer / Groups | |
-| Spatial / 3D Audio | |
-| Dynamic Audio | |
+| Audio Mixer / Groups | No custom mixer implementation is visible in the inspected scripts. Audio is assigned through Unity `AudioSource` components. |
+| Spatial / 3D Audio | No custom spatial-audio logic is visible in the inspected scripts. |
+| Dynamic Audio | Walking, jumping, and checkpoint audio are triggered by gameplay state/events. |
 
 ---
 
@@ -243,19 +250,20 @@ Detailed Sprites - Most sprites have multiple layers in the map
 ### 6.1 HUD Elements
 | Element | Purpose | Screenshot |
 |---|---|---|
-| | | |
-| | | |
-| | | |
+| Velocity display | Shows the player’s horizontal velocity, vertical velocity, and overall speed using TextMesh Pro. | |
+| Interaction icon | Lets the player know when they are close enough to interact with an NPC or object. | |
+| Dialogue panel | Shows the NPC’s name, portrait, and dialogue one character at a time. | |
 
 > Add screenshot images using: `![HUD Element](./docs/screenshots/hud_name.png)`
 
 ### 6.2 Menus
 | Menu | Purpose | Screenshot |
 |---|---|---|
-| Main Menu | | |
-| Pause Menu | | |
-| Game Over Screen | | |
-| | | |
+| Main Menu | Starts the `Main` scene and provides an exit button. | |
+| Pause Menu | Toggled with Tab and controlled through `PauseController`. | |
+| Tips Screen | Toggled with H through `TipsMenuController`. | |
+| Dialogue Menu | Pauses gameplay while NPC dialogue is active. | |
+| Game Over Screen | No dedicated game-over controller is present in the inspected scripts. | |
 
 > Add screenshot images using: `![Menu Name](./docs/screenshots/menu_name.png)`
 
@@ -266,10 +274,8 @@ Detailed Sprites - Most sprites have multiple layers in the map
 ### 7.1 Scene List
 | Scene Name | Purpose | Description |
 |---|---|---|
-| | | |
-| | | |
-| | | |
-| | | |
+| Main | Gameplay scene loaded by the start menu. | The scene name is referenced by `StartMenuController`; its scene file is not committed in the inspected repository files. |
+| Start menu scene | Main-menu entry point. | The exact scene name is configured through Unity scene/build settings and is not referenced by script. |
 
 ### 7.2 Level / Environment Screenshots
 | Level / Area | Description | Screenshot |
@@ -283,9 +289,9 @@ Detailed Sprites - Most sprites have multiple layers in the map
 ### 7.3 Scene Management
 | Feature | Description |
 |---|---|
-| Scene Loading Method | |
-| Persistent Data Between Scenes | |
-| Scene Transition Effects | |
+| Scene Loading Method | `SceneManager.LoadScene("Main")` is used by `StartMenuController`. |
+| Persistent Data Between Scenes | `Checkpoint.savedPosition` is static and can persist while the application remains running. |
+| Scene Transition Effects | `ScreenFader` provides coroutine-based fade-to-black and fade-from-black transitions for out-of-bounds teleporting. |
 
 ---
 
@@ -294,25 +300,31 @@ Detailed Sprites - Most sprites have multiple layers in the map
 ### 8.1 Script Summary
 | Script Name | Attached To | Responsibility |
 |---|---|---|
-| | | |
-| | | |
-| | | |
-| | | |
-| | | |
+| `PlayerMovement.cs` | Player | Rigidbody2D movement, jumping, air jumps, dash, slide, wall slide/jump, animation, and movement audio. |
+| `ParcelController.cs` | Parcel | Destroys a parcel when it enters a trigger with the Player tag. |
+| `Checkpoint.cs` / `DeathZone.cs` | Checkpoint / hazard | Saves a checkpoint position and respawns the player after death. |
+| `Parallax.cs` | Background sprite | Moves and wraps background sprites relative to the camera. |
+| `NPC.cs`, `NPC Dialouge.cs`, `InteractionDetector.cs`, `IInteractable.cs` | NPC / player interaction | Provides interactable objects, NPC dialogue data, dialogue UI, and interaction detection. |
+| `DIALOGUE.cs` | Dialogue UI | Types dialogue lines and temporarily freezes player movement. |
+| `MenuController.cs`, `PauseController.cs`, `StartMenuController.cs`, `TipsPopup.cs`, `ExitButton.cs` | UI/menu objects | Controls pause, start, tips, scene loading, and quitting. |
+| `FadeBehaviour.cs`, `OutOfBounds.cs` | Screen/UI and hazard | Fades the screen and teleports the player when leaving the playable area. |
+| `VelocityDisplay.cs` | HUD | Displays the player Rigidbody2D velocity and speed. |
 
 ### 8.2 Key Algorithms / Logic
 | Feature | Script | Description |
 |---|---|---|
-| | | |
-| | | |
-| | | |
+| Buffered/coyote-time jumping | `PlayerMovement.cs` | A short jump buffer accepts early input and coyote time allows a jump shortly after leaving a platform. |
+| Accelerated platform movement | `PlayerMovement.cs` | Ground and air acceleration, friction, speed caps, and directional facing create responsive movement. |
+| Respawn checkpoint system | `Checkpoint.cs`, `DeathZone.cs` | A static position is saved on checkpoint activation and reused after entering a death zone. |
+| Infinite parallax background | `Parallax.cs` | Background position is offset by camera movement and wrapped when it reaches its sprite length. |
+| Typewriter dialogue | `NPC.cs`, `DIALOGUE.cs` | Dialogue is revealed one character at a time and can be advanced or completed by the player. |
 
 ### 8.3 Design Patterns Used
 | Pattern | Where Applied | Justification |
 |---|---|---|
-| | | |
-| | | |
-| | | |
+| Component-based design | Unity MonoBehaviours | I separated different gameplay responsibilities into components that can be attached to Unity objects. |
+| Interface-based interaction | `IInteractable` | This allows the player to interact with NPCs and other interactable objects using the same system. |
+| Coroutine-based timed actions | `PlayerMovement`, `OutOfBounds`, `ScreenFader`, dialogue scripts | Coroutines are used for timed actions such as dashes, slides, screen fades, teleporting, and dialogue text. |
 
 ---
 
@@ -340,35 +352,36 @@ Detailed Sprites - Most sprites have multiple layers in the map
 ### 10.1 Visual Assets
 | Asset Name | Type | Creator / Source | Licence | URL | Used For |
 |---|---|---|---|---|---|
-| | | | | | |
-| | | | | | |
-| | | | | | |
+| Player/background sprites | 2D sprites | Source not recorded in repository | Must be confirmed by the student | | Player and environment visuals |
+| TextMesh Pro resources | UI resources | Unity Technologies / TextMesh Pro package | Unity package licence | https://docs.unity3d.com/Packages/com.unity.textmeshpro@latest/ | Text and UI support |
 
 ### 10.2 Audio Assets
 | Asset Name | Type | Creator / Source | Licence | URL | Used For |
 |---|---|---|---|---|---|
-| | | | | | |
-| | | | | | |
-| | | | | | |
+| `Courier Chaos BGM.MP3` | Music | Source not recorded | Must be confirmed by the student | | Background music |
+| `action_jump.mp3` | Sound effect | Source not recorded | Must be confirmed by the student | | Jump audio candidate |
+| `TheFatRat_-_Xenogenesis_(mp3.pm).mp3` | Music | The FatRat / downloaded source name | Licence and permission must be confirmed | | Imported music asset |
+| `skyrim-npc-music-harvest-dawn.mp3` | Music | Source not recorded | Licence and permission must be confirmed | | Imported music asset |
 
 ### 10.3 Scripts & Code Snippets
 | Script / Snippet | Source | Licence | URL | Used For | Changes Made |
 |---|---|---|---|---|---|
-| | | | | | |
-| | | | | | |
+| Custom gameplay scripts | This repository | Student work | Repository project | Movement, interaction, UI, checkpoints, and hazards | Written for this project; no external snippet source recorded |
 
 ### 10.4 Unity Packages & Plugins
 | Package Name | Version | Source | Licence | URL | Purpose |
 |---|---|---|---|---|---|
-| | | | | | |
-| | | | | | |
-| | | | | | |
+| 2D Sprite | 1.0.0 | Unity Package Manager | Unity licence | https://docs.unity3d.com/Packages/com.unity.2d.sprite@1.0/manual/index.html | 2D sprite workflow |
+| 2D Tilemap | 1.0.0 | Unity Package Manager | Unity licence | https://docs.unity3d.com/Packages/com.unity.2d.tilemap@latest/ | Tilemap level construction |
+| Cinemachine | 3.1.7 | Unity Package Manager | Unity licence | https://docs.unity3d.com/Packages/com.unity.cinemachine@3.1/manual/index.html | Camera tools |
+| Input System | 1.14.2 | Unity Package Manager | Unity licence | https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/manual/index.html | Input actions and interaction |
+| Universal Render Pipeline | 17.0.4 | Unity Package Manager | Unity licence | https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@17.0/manual/index.html | Rendering pipeline |
 
 ### 10.5 Fonts
 | Font Name | Creator / Source | Licence | URL |
 |---|---|---|---|
-| | | | |
-| | | | |
+| Liberation Sans | TextMesh Pro package | SIL Open Font License; licence file included in project | https://scripts.sil.org/OFL |
+| Unity / Roboto / Oswald / Bangers / Anton | TextMesh Pro examples and extras | Licence files are included beside the fonts; verify which fonts are used | |
 
 ---
 
@@ -376,11 +389,11 @@ Detailed Sprites - Most sprites have multiple layers in the map
 
 | # | Challenge Encountered | How It Was Solved |
 |---|---|---|
-| 1 | | |
-| 2 | | |
-| 3 | | |
-| 4 | | |
-| 5 | | |
+| 1 | Making the movement feel responsive while still using Rigidbody2D physics | I used separate ground and air acceleration, friction, speed limits, jump buffering, and coyote time in `PlayerMovement`. |
+| 2 | Adding several movement abilities without them conflicting | I added air-jump limits, dash limits, sliding, wall sliding, and wall jumping with checks for the player’s current state. |
+| 3 | Preventing the player from losing too much progress after falling | Checkpoints save a position, and the death zone sends the player back to the most recent checkpoint. |
+| 4 | Stopping the player from moving during dialogue | The dialogue systems freeze the player or pause the game until the conversation is finished. |
+| 5 | Making the background work across a long level | `Parallax` moves the background with the camera and repeats it when it reaches the edge of the sprite. |
 
 ---
 
